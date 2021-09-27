@@ -1,16 +1,34 @@
-const https = require('https');
-const url = 'http://localhost:8080';
+const http = require("http");
+const url = "http://localhost:8080";
 
 const file = {
-    body:{
-        filename,
-        filesize,
-        nodeIP,
-        nodePort,
-    }
-}
+  id,
+  filename,
+  filesize,
+  nodeIP,
+  nodePort,
+};
 
+const cargaFile = function (id, filename, filesize, nodeIP, nodePort) {
+  file[id] = id;
+  file[filename] = filename;
+  file[filesize] = filesize;
+  file[nodeIP] = nodeIP;
+  file[nodePort] = nodePORT;
+  altaArchivo();
+};
 
-const request = http.get(url, {method: 'POST'}, function(response) {
-    let body = file.body;
+const altaArchivo = http.get(url, { method: "POST" }, function (response) {
+  let body = file;
+  response.on("data", function (chunk) {
+    body += chunk;
+  });
+  response.on("end", function () {
+    console.log(body);
+  });
+  response.on("close", () => {
+    console.log("Connection closed!");
+  });
 });
+
+cargaFile(1, 2, 3, 4, 5);

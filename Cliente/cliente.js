@@ -2,11 +2,11 @@ const http = require("http");
 const url = "http://localhost:8080";
 
 const file = {
-  id,
-  filename,
-  filesize,
-  nodeIP,
-  nodePort,
+  id: null,
+  filename: null,
+  filesize: null,
+  nodeIP: null,
+  nodePort: null,
 };
 
 const cargaFile = function (id, filename, filesize, nodeIP, nodePort) {
@@ -14,8 +14,8 @@ const cargaFile = function (id, filename, filesize, nodeIP, nodePort) {
   file[filename] = filename;
   file[filesize] = filesize;
   file[nodeIP] = nodeIP;
-  file[nodePort] = nodePORT;
-  altaArchivo();
+  file[nodePort] = nodePort;
+  altaArchivo;
 };
 
 const altaArchivo = http.get(url, { method: "POST" }, function (response) {

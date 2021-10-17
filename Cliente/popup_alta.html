@@ -5,20 +5,25 @@
     <meta charset="utf-8">
     <title>PopUp</title>
     <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src='cliente.js'></script>
 </head>
 
 <body>
 
     <div class='popup_formulario' id='formulario_alta'>
-        <form name=" File-Form" action="#">
+        <form name=" File-Form" action="http://localhost:8080" method='POST'>
             <label>id: </label><input type="text" id="fid"><br>
             <label>filename: </label><input type="text" id="fname"><br>
             <label>filesize: </label><input type="text" id="fsize"><br>
             <label>nodeIP: </label><input type="text" id="fnodeip"><br>
             <label>nodePort: </label><input type="text" id="fnodeport"><br>
-            <input type="button" value="Enviar Solicitud">
+            <!--<button onclick="cartel();">Subir</button>-->
+            <button onclick="cargaFile();">Subir</button>
+
         </form>
     </div>
+
+
 </body>
 
 </html>

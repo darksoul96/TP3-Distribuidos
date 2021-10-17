@@ -2,23 +2,14 @@ const http = require("http");
 //const { request } = require("https");
 const url = "http://localhost:8080";
 
-const file = {
+/*const file = {
   id: null,
   filename: null,
   filesize: null,
   nodeIP: null,
   nodePort: null,
-};
+};*/
 
-const cargaFile = function (id, filename, filesize, nodeIP, nodePort) {
-  file.id = id;
-  file.filename = filename;
-  file.filesize = filesize;
-  file.nodeIP = nodeIP;
-  file.nodePort = nodePort;
-  request.write(JSON.stringify(file));
-  request.end();
-};
 
 const request = http.request(url, { method: "POST" }, function (response) {
   response.on("data", function (chunk) {
@@ -32,4 +23,39 @@ const request = http.request(url, { method: "POST" }, function (response) {
   });
 });
 
-cargaFile(1, 2, 3, 4, 5);
+
+function cargaFile() {
+  /*file.id = id;
+  file.filename = filename;
+  file.filesize = filesize;
+  file.nodeIP = nodeIP;
+  file.nodePort = nodePort;
+  */
+  fid = document.getElementById('fid').value;
+  fname = document.getElementById('fname').value;
+  fsize = document.getElementById('fsize').value;
+  fnodeip = document.getElementById('fnodeip').value;
+  fnodeport = document.getElementById('fnodeport').value;
+
+  let file = {
+    id: fid,
+    filename: fname,
+    filesize: fsize,
+    nodeIP: fnodeip,
+    nodePort: fnodeport,
+  };
+  /*let file = {
+    id: 1,
+    filename: 2,
+    filesize: 3,
+    nodeIP: 4,
+    nodePort: 5,
+  };*/
+
+  request.write(JSON.stringify(file));
+  request.end();
+};
+
+
+
+

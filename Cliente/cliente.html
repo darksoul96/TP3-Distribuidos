@@ -4,18 +4,27 @@
 <head>
     <meta charset="utf-8">
     <title>FrontEnd Cliente</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <h1>Alta de Archivos</h1>
-    <form name="File-Form" action="#">
-        <label>id: </label><input type="text" id="fid"><br>
-        <label>filename: </label><input type="text" id="fname"><br>
-        <label>filesize: </label><input type="text" id="fsize"><br>
-        <label>nodeIP: </label><input type="text" id="fnodeip"><br>
-        <label>nodePort: </label><input type="text" id="fnodeport"><br>
-        <input type="button" value="Enviar Solicitud">
-    </form>
+    <!--
+    <script>
+
+        function popup() {
+            document.getElementById("formulario_alta").style.display = 'block';
+        }
+    </script>
+-->
+
+    <a href="popup_alta.html" target="popup"
+        onclick="window.open('popup_alta.html','popup','width=200,height=300'); return false;">
+        <p style="font-family:Verdana, Geneva, Tahoma, sans-serif; font-size: 200%;">Subir Archivo</p>
+    </a> >
+
+
+
+
 </body>
 
 </html>

@@ -1,24 +1,32 @@
-const http = require('http');
-const port;
+const http = require("http");
+const port = 8080;
 
 const file = {
-    filename,
-    filesize,
-    nodeIP,
-    nodePort,
-}
+  id: null,
+  filename: null,
+  filesize: null,
+  nodeIP: null,
+  nodePort: null,
+};
 
 const server = http.createServer((request, response) => {
+  console.log("Connected!");
 
-    request.on('data', (chunk) => {
-        file = chunk;
+  if (request.method === "POST") {
+    request.on("data", (chunk) => {
+      console.log(JSON.parse(chunk));
     });
+  }
 
-    request.on('end', () => {
-        console.log(file)
-    });
+  request.on("end", () => {
+    console.log("Server Recieved : ");
+  });
+
+  request.on("close", () => {
+    console.log("Connection closed");
+  });
 });
 
 server.listen(port, () => {
-    console.log('Server on');
+  console.log("Server on");
 });

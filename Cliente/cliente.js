@@ -1,4 +1,5 @@
 const http = require("http");
+//const { request } = require("https");
 const url = "http://localhost:8080";
 
 const file = {
@@ -10,16 +11,16 @@ const file = {
 };
 
 const cargaFile = function (id, filename, filesize, nodeIP, nodePort) {
-  file[id] = id;
-  file[filename] = filename;
-  file[filesize] = filesize;
-  file[nodeIP] = nodeIP;
-  file[nodePort] = nodePort;
-  altaArchivo;
+  file.id = id;
+  file.filename = filename;
+  file.filesize = filesize;
+  file.nodeIP = nodeIP;
+  file.nodePort = nodePort;
+  request.write(JSON.stringify(file));
+  request.end();
 };
 
-const altaArchivo = http.get(url, { method: "POST" }, function (response) {
-  let body = file;
+const request = http.request(url, { method: "POST" }, function (response) {
   response.on("data", function (chunk) {
     body += chunk;
   });

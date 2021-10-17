@@ -1,40 +1,19 @@
-const http = require("http");
+const express = require("express");
+const bodyParser = require("body-parser");
+
 const port = 8080;
 
+const app = express();
+const server = app.listen(port, listening);
 
+function listening() {
+  console.log("Server on");
+}
 
-const server = http.createServer((request) => {
-    console.log("Connected!");
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
-    //if (request.method == 'POST') {
-    var body;
-    request.on('data', function (data) {
-        body = data;
-        console.log('Hello!!!');
-    });
-
-    request.on('end', function () {
-        console.log(JSON.parse(body));
-        // use post['blah'], etc.
-    });
-
-    /*
-    //if (request.method === "POST") {
-    request.on("data", (chunk) => {
-        console.log(JSON.parse('Hello!'));
-    });
-    //}
-
-    request.on("end", () => {
-        console.log("Server Recieved : ");
-    });
-
-    request.on("close", () => {
-        console.log("Connection closed");
-    });*/
-    //}
-});
-
-server.listen(port, () => {
-    console.log('Server on');
+app.post("/", (req, res) => {
+  console.log(req.body);
+  //res.status(201).send("File Recieved");
 });

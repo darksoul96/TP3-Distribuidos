@@ -1,18 +1,4 @@
-//const http = require("http");
-//const { request } = require("https");
 const url = "http://localhost:8080";
-
-// const request = http.request(url, { method: "POST" }, function (response) {
-//   response.on("data", function (chunk) {
-//     body += chunk;
-//   });
-//   response.on("end", function () {
-//     console.log(body);
-//   });
-//   response.on("close", () => {
-//     console.log("Connection closed!");
-//   });
-// });
 
 const cargaFile = () => {
   console.log("hola");
@@ -35,15 +21,14 @@ const cargaFile = () => {
     headers: {
       "Content-Type": "application/json",
     },
-    //body: JSON.stringify(file),
-    //body: JSON.stringify("holaaaaA"),
+    body: JSON.stringify(file),
+    //body: JSON.stringify("holaaaa"),
   })
-    .then((response) => response.json())
+    .then((response) => response.text())
     .then((data) => {
       console.log("Success:", data);
     })
     .catch((error) => {
       console.error("Error:", error);
     });
-  post;
 };

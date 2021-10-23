@@ -5,11 +5,9 @@ const cors = require("cors");
 const port = 8080;
 
 const app = express();
-const server = app.listen(port, listening);
-
-function listening() {
-  console.log("Server on");
-}
+const server = app.listen(port, () => {
+  console.log("Server on")
+});
 
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));

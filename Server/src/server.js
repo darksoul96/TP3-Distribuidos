@@ -26,8 +26,9 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
+  console.log("Recibe archivo: \n");
+  console.log(req.body);
   loadFile(trackerFile, req.body);
-  console.log(trackerFile.hash);
   client.send(JSON.stringify(trackerFile), portst, "localhost", (err) => {
     if (err) {
       console.log(err);

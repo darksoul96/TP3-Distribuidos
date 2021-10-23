@@ -1,10 +1,12 @@
 const udp = require("dgram");
 const ht = require("./utils/hashtable.js");
 const trackerClient = udp.createSocket("udp4");
+const process = require("process");
+const args = process.argv;
 
 trackerClient.bind({
-  address: "localhost",
-  port: "8399",
+  address: args[2],
+  port: args[3],
   exclusive: true,
 });
 

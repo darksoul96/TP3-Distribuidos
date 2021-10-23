@@ -12,20 +12,24 @@ const server = app.listen(portcs, () => {
 });
 
 var trackerFile = {
-  hash = "",
-  filename = "",
-  filesize = 0,
-  nodeIP = "", 
-  nodePort = ""
-}
+  hash: "",
+  filename: "",
+  filesize: 0,
+  nodeIP: "",
+  nodePort: "",
+};
 
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 app.post("/", (req, res) => {
-  loadFile(trackerFile,req.body);
-  client.send(trackerFile,portst,'localhost',(err) => {
+  loadFile(trackerFile, req.body);
+  client.send(trackerFile, portst, "localhost", (err) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error loading file: " + err.message);
@@ -35,7 +39,7 @@ app.post("/", (req, res) => {
   res.status(201).send("File Recieved");
 });
 
-function loadFile(trackerFile,file) {
+function loadFile(trackerFile, file) {
   trackerFile.filename = file.filename;
   trackerFile.filesize = file.filesize;
   trackerFile.nodeIP = file.nodeIP;
@@ -44,8 +48,3 @@ function loadFile(trackerFile,file) {
   trackerFile.hash.update(file.filename + Math.round(file.filesize).toString());
   console.log(trackerFile.hash.digest("hex"));
 }
-
-
-
-
-

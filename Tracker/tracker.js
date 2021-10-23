@@ -9,8 +9,8 @@ trackerClient.bind({
 });
 
 var hashEntry = {
-  hash: "",
-  fileName: "",
+  hash: null,
+  fileName: null,
   filesize: null,
   nodeIP: "",
   nodePort: null,
@@ -20,22 +20,24 @@ trackerClient.on("message", (msg, info) => {
   console.log(
     `Recibio el mensaje: ${msg} de la direccion: ${info.address} con puerto: ${info.port}`
   );
-
-  loadEntry(hashEntry, msg, info);
+  msg = JSON.parse(msg);
+  loadEntry(hashEntry, msg);
+  console.log(hashEntry.fileName);
   let arrayInfo = {
     filename: hashEntry.fileName,
-    size: hash.hashEntry.size,
+    size: hashEntry.size,
     par: { ip: hashEntry.nodeIP, port: hashEntry.nodePort },
   };
-  ht.set(hash, arrayInfo);
+  ht.set(msg.hash, arrayInfo);
+  console.log(ht.get(msg.hash));
 });
 
-function loadEntry(hashEntry, msg, info) {
-  hashEntry.hash = msg.body.hash;
-  hashEntry.fileName = msg.body.fileName;
-  hashEntry.size = msg.body.filesize;
-  hashEntry.nodeIP = info.address;
-  hashEntry.nodePort = info.port;
+function loadEntry(hashEntry, msg) {
+  hashEntry.hash = msg.hash;
+  hashEntry.fileName = msg.filename;
+  hashEntry.size = msg.filesize;
+  hashEntry.nodeIP = msg.nodeIP;
+  hashEntry.nodePort = msg.nodePort;
 }
 
 trackerClient.on("listening", () => {

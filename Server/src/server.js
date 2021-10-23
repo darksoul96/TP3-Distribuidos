@@ -11,7 +11,7 @@ const server = app.listen(portcs, () => {
 });
 
 var trackerFile = {
-  hash: "",
+  hash: null,
   filename: "",
   filesize: 0,
   nodeIP: "",
@@ -27,7 +27,8 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
   loadFile(trackerFile, req.body);
-  client.send(trackerFile, portst, "localhost", (err) => {
+  console.log(trackerFile.hash);
+  client.send(JSON.stringify(trackerFile), portst, "localhost", (err) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error loading file: " + err.message);
@@ -42,7 +43,7 @@ function loadFile(trackerFile, file) {
   trackerFile.filesize = file.filesize;
   trackerFile.nodeIP = file.nodeIP;
   trackerFile.nodePort = file.nodePort;
-  trackerFile.hash = crypto.createHash("sha1");
-  trackerFile.hash.update(file.filename + Math.round(file.filesize).toString());
-  console.log(trackerFile.hash.digest("hex"));
+  let hash = crypto.createHash("sha1");
+  hash.update(file.filename + Math.round(file.filesize).toString());
+  trackerFile.hash = hash.digest("hex");
 }

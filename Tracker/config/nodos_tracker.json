@@ -1,0 +1,24 @@
+{
+    "nodos": [
+        {
+            "address": "localhost",
+            "port": "8399"
+        },
+        {
+            "address": "localhost",
+            "port": "8400"
+        },
+        {
+            "address": "localhost",
+            "port": "8401"
+        },
+        {
+            "address": "localhost",
+            "port": "8402"
+        },
+        {
+            "address": "localhost",
+            "port": "8403"
+        }
+    ]
+}

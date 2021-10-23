@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const cors = require("cors");
 const crypto = require("crypto");
 const dgram = require("dgram");
@@ -20,7 +19,6 @@ var trackerFile = {
 };
 
 app.use(cors());
-app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.get("/", (req, res) => {

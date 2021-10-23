@@ -37,3 +37,4 @@ class HashTable {
     }
 }
 
+module.exports = new HashTable();

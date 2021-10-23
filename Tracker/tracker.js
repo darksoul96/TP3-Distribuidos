@@ -1,5 +1,5 @@
 const udp = require('dgram');
-const ht = require('utils/hashtable.js');
+const ht = require('./utils/hashtable');
 const trackerClient = udp.createSocket('udp4');
 
 var hashEntry = {
@@ -10,7 +10,6 @@ var hashEntry = {
     nodePort: null
 };
 
-var ht = new HashTable();
 
 trackerClient.on('message', (msg, info) => {
     console.log('Recibio el mensaje: ${msg} de la direccion: ${info.address} con puerto: ${info.port}');

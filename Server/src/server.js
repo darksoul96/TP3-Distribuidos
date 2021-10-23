@@ -33,9 +33,9 @@ app.post("/", (req, res) => {
       console.log(err);
       res.status(500).send("Error loading file: " + err.message);
     }
-    client.close();
   });
   res.status(201).send("File Recieved");
+  res.end();
 });
 
 function loadFile(trackerFile, file) {

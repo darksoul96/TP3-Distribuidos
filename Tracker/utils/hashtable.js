@@ -34,6 +34,10 @@ class HashTable {
       return false;
     }
   }
+
+  list() {
+    return this.table;
+  }
 }
 
 module.exports = new HashTable();

@@ -22,14 +22,14 @@ trackerClient.on("message", (msg, info) => {
   );
   msg = JSON.parse(msg);
   loadEntry(hashEntry, msg);
-  console.log(hashEntry.fileName);
   let arrayInfo = {
     filename: hashEntry.fileName,
     size: hashEntry.size,
     par: { ip: hashEntry.nodeIP, port: hashEntry.nodePort },
   };
   ht.set(msg.hash, arrayInfo);
-  console.log(ht.get(msg.hash));
+  //console.log(ht.get(msg.hash));
+  console.log(ht.list());
 });
 
 function loadEntry(hashEntry, msg) {

@@ -22,7 +22,6 @@ const cargaFile = () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(file),
-    //body: JSON.stringify("holaaaa"),
   })
     .then((response) => response.text())
     .then((data) => {

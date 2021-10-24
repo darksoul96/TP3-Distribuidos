@@ -23,10 +23,15 @@ function runScript(scriptPath, args, callback) {
   });
 }
 
-nodos.forEach(function (nodo) {
-  runScript("./tracker.js", [nodo.id], function (err) {
-    if (err) throw err;
-    console.log("finished running some-script.js");
-  });
-});
-console.log(nodos);
+async function createTrackers() {
+  for (var i = 0; i < nodos.length; i++) {
+    await runScript("./tracker.js", [nodos[i].id], function (err) {
+      if (err) throw err;
+    });
+    console.log("Tracker: " + nodos[i].id);
+  }
+  console.log("Finished loading trackers");
+}
+
+createTrackers();
+//console.log(nodos);

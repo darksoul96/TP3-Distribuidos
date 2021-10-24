@@ -53,6 +53,10 @@ class HashTable {
       this.table = array;
     }
   }
+
+  getTable() {
+    return this.table;
+  }
 }
 
 module.exports = new HashTable();

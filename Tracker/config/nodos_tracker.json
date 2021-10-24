@@ -1,119 +1,79 @@
 {
-    "nodos": [
-        {
-            "id": 1,
-            "address": "127.0.0.1",
-            "port": "8399",
-            "tablaHash": [],
-            "sizeTabla": 0,
-            "nodoDerecha": [
-                {
-                    "addressD": "127.0.0.1"
-                },
-                {
-                    "portD": "8400"
-                }
-            ],
-            "nodoIzquierda": [
-                {
-                    "addressD": "127.0.0.1"
-                },
-                {
-                    "portD": "8403"
-                }
-            ]
-        },
-        {
-            "id": 2,
-            "address": "127.0.0.1",
-            "port": "8400",
-            "tablaHash": [],
-            "sizeTabla": 0,
-            "nodoDerecha": [
-                {
-                    "addressD": "127.0.0.1"
-                },
-                {
-                    "portD": "8401"
-                }
-            ],
-            "nodoIzquierda": [
-                {
-                    "addressD": "127.0.0.1"
-                },
-                {
-                    "portD": "8399"
-                }
-            ]
-        },
-        {
-            "id": 3,
-            "address": "127.0.0.1",
-            "port": "8401",
-            "tablaHash": [],
-            "sizeTabla": 0,
-            "nodoDerecha": [
-                {
-                    "addressD": "127.0.0.1"
-                },
-                {
-                    "portD": "8402"
-                }
-            ],
-            "nodoIzquierda": [
-                {
-                    "addressD": "127.0.0.1"
-                },
-                {
-                    "portD": "8400"
-                }
-            ]
-        },
-        {
-            "id": 4,
-            "address": "127.0.0.1",
-            "port": "8402",
-            "tablaHash": [],
-            "sizeTabla": 0,
-            "nodoDerecha": [
-                {
-                    "addressD": "127.0.0.1"
-                },
-                {
-                    "portD": "8403"
-                }
-            ],
-            "nodoIzquierda": [
-                {
-                    "addressD": "127.0.0.1"
-                },
-                {
-                    "portD": "8401"
-                }
-            ]
-        },
-        {
-            "id": 5,
-            "address": "127.0.0.1",
-            "port": "8403",
-            "tablaHash": [],
-            "sizeTabla": 0,
-            "nodoDerecha": [
-                {
-                    "addressD": "127.0.0.1"
-                },
-                {
-                    "portD": "8399"
-                }
-            ],
-            "nodoIzquierda": [
-                {
-                    "addressD": "127.0.0.1"
-                },
-                {
-                    "portD": "8402"
-                }
-            ]
-        }
-    ]
+  "nodos": [
+    {
+      "id": 1,
+      "address": "127.0.0.1",
+      "port": "8399",
+      "tablaHash": [],
+      "sizeTabla": 0,
+      "nodoDerecha": {
+        "addressD": "127.0.0.1",
+        "portD": "8400"
+      },
+      "nodoIzquierda": {
+        "addressI": "127.0.0.1",
+        "portI": "8403"
+      }
+    },
+    {
+      "id": 2,
+      "address": "127.0.0.1",
+      "port": "8400",
+      "tablaHash": [],
+      "sizeTabla": 0,
+      "nodoDerecha": {
+        "addressD": "127.0.0.1",
+        "portD": "8401"
+      },
+      "nodoIzquierda": {
+        "addressI": "127.0.0.1",
+        "portI": "8399"
+      }
+    },
+    {
+      "id": 3,
+      "address": "127.0.0.1",
+      "port": "8401",
+      "tablaHash": [],
+      "sizeTabla": 0,
+      "nodoDerecha": {
+        "addressD": "127.0.0.1",
+        "portD": "8402"
+      },
+      "nodoIzquierda": {
+        "addressI": "127.0.0.1",
+        "portI": "8400"
+      }
+    },
+    {
+      "id": 4,
+      "address": "127.0.0.1",
+      "port": "8402",
+      "tablaHash": [],
+      "sizeTabla": 0,
+      "nodoDerecha": {
+        "addressD": "127.0.0.1",
+        "portD": "8403"
+      },
+      "nodoIzquierda": {
+        "addressI": "127.0.0.1",
+        "portI": "8401"
+      }
+    },
+    {
+      "id": 5,
+      "address": "127.0.0.1",
+      "port": "8403",
+      "tablaHash": [],
+      "sizeTabla": 0,
+      "nodoDerecha": {
+        "addressD": "127.0.0.1",
+        "portD": "8399"
+      },
+      "nodoIzquierda": {
+        "addressI": "127.0.0.1",
+        "portI": "8402"
+      }
+    }
+  ]
 }

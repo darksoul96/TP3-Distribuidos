@@ -18,6 +18,16 @@ var hashEntry = {
     nodePort: null,
 };
 
+var nodoDerecha = {
+    addressD = null,
+    portD = null
+}
+
+var nodoIzquierda = {
+    addressI = null,
+    portI = null
+}
+
 trackerClient.on("message", (msg, info) => {
     console.log(
         `Recibio el mensaje: ${msg} de la direccion: ${info.address} con puerto: ${info.port}`

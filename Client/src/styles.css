@@ -141,7 +141,7 @@ body {
     
     .panel#home {
     z-index: 1;
-    background: radial-gradient(ellipse at center, rgba(255,255,255,1) 0%,#abd3e2 100%); }
+    background: radial-gradient(ellipse at center, rgba(255,255,255,1) 0%,#68b3d1 100%); }
     
     
     /*  Specific panel "Slice" */
@@ -186,15 +186,10 @@ body {
 
     .panel#panel_form {
         transition: all 700ms;
-        opacity: 0.5;
-        z-index: 1;
-        background: radial-gradient(ellipse at center, rgba(255,255,255,1) 0%,#abd3e2 100%); }
-    
-    
-        
-    .panel#panel_form:hover {
-        transition: all 700ms;
         opacity: 1;
-    }
+        z-index: 1;
+        background: radial-gradient(ellipse at center, rgba(255,255,255,1) 0%,#68b3d1 100%); }
+    
+    
 
     

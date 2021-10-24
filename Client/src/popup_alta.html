@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>PopUp</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
 
-  <body>
-    <div class="popup_formulario" id="formulario_alta">
-      <form name=" File-Form" onsubmit="cargaFile();return false">
-        <label>id: </label><input type="text" name="fid" id="fid" /><br />
-        <label>filename: </label
-        ><input type="text" name="fname" id="fname" /><br />
-        <label>filesize: </label
-        ><input type="text" name="fsize" id="fsize" /><br />
-        <label>nodeIP: </label
-        ><input type="text" name="fnodeip" id="fnodeip" /><br />
-        <label>nodePort: </label
-        ><input type="text" name="fnodeport" id="fnodeport" /><br />
-        <!--<button onclick="cartel();">Subir</button>-->
-        <button type="submit">Subir2</button>
-      </form>
-    </div>
-    <script defer type="text/javascript" src="cliente.js"></script>
-  </body>
+<head>
+  <meta charset="utf-8" />
+  <title>Formulario de subida de archivos</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="formulario" id="formulario_alta">
+    <form name="File-Form" onsubmit="cargaFile();return false">
+      <label>id: </label><input type="text" name="fid" id="fid" /><br />
+      <label>filename: </label><input type="text" name="fname" id="fname" /><br />
+      <label>filesize: </label><input type="text" name="fsize" id="fsize" /><br />
+      <label>nodeIP: </label><input type="text" name="fnodeip" id="fnodeip" /><br />
+      <label>nodePort: </label><input type="text" name="fnodeport" id="fnodeport" /><br />
+      <!--<button onclick="cartel();">Subir</button>-->
+      <button type="submit">Subir2</button>
+    </form>
+  </div>
+  <script defer type="text/javascript" src="cliente.js"></script>
+</body>
+
 </html>

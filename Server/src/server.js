@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.post("/", (req, res) => {
+app.post("/file/", (req, res) => {
   console.log("Recibe archivo: \n");
   console.log(req.body);
   loadFile(trackerFile, req.body);

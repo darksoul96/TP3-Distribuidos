@@ -1,7 +1,5 @@
 const url = "http://localhost:8080";
 
-
-
 const cargaFile = () => {
   console.log("hola");
   fid = document.getElementById("fid").value;
@@ -18,7 +16,7 @@ const cargaFile = () => {
     nodePort: fnodeport,
   };
   console.log(file);
-  const post = fetch(url, {
+  const post = fetch(url + "/file/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

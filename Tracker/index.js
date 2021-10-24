@@ -24,7 +24,7 @@ function runScript(scriptPath, args, callback) {
 }
 
 nodos.forEach(function (nodo) {
-  runScript("./tracker.js", [nodo.address, nodo.port], function (err) {
+  runScript("./tracker.js", [nodo.id], function (err) {
     if (err) throw err;
     console.log("finished running some-script.js");
   });

@@ -1,12 +1,19 @@
 const udp = require("dgram");
-const ht = require("./utils/hashtable.js");
+var ht = require("./utils/hashtable.js");
 const trackerClient = udp.createSocket("udp4");
 const process = require("process");
 const args = process.argv;
 
+var localaddress, localport;
+
+if (args > 2)
+    const id = args[2];
+else
+    const id = 1;
+
 trackerClient.bind({
-    address: args[2],
-    port: args[3],
+    address: localaddress,
+    port: localport,
     exclusive: true,
 });
 
@@ -27,6 +34,18 @@ var nodoIzquierda = {
     addressI = null,
     portI = null
 }
+
+
+    (function initTracker() {
+        var nodos = JSON.parse(fs.readFileSync("./config/nodos_tracker.json", "utf8"))[
+            "nodos"
+        ];
+        localaddress = nodos[id].nodeIP;
+        localport = nodos[id].nodePort;
+        ht.loadTable(nodos[id].tablaHash);
+        ht.setSize(nodos[id].sizeTabla);
+    })();
+
 
 var cantidadNodosArchivos = [0, 0];
 

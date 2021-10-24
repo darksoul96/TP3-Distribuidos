@@ -38,6 +38,21 @@ class HashTable {
   list() {
     return this.table;
   }
+
+  getSize() {
+    return this.size;
+  }
+
+  setSize(size) {
+    this.size = size;
+  }
+
+  loadTable(array, size) {
+    if (size <= 127) {
+      this.size = size;
+      this.table = array;
+    }
+  }
 }
 
 module.exports = new HashTable();

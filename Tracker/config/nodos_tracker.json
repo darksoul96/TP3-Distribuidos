@@ -4,6 +4,8 @@
             "id": 1,
             "address": "127.0.0.1",
             "port": "8399",
+            "tablaHash": [],
+            "sizeTabla": 0,
             "nodoDerecha": [
                 {
                     "addressD": "127.0.0.1"
@@ -25,6 +27,8 @@
             "id": 2,
             "address": "127.0.0.1",
             "port": "8400",
+            "tablaHash": [],
+            "sizeTabla": 0,
             "nodoDerecha": [
                 {
                     "addressD": "127.0.0.1"
@@ -46,6 +50,8 @@
             "id": 3,
             "address": "127.0.0.1",
             "port": "8401",
+            "tablaHash": [],
+            "sizeTabla": 0,
             "nodoDerecha": [
                 {
                     "addressD": "127.0.0.1"
@@ -67,6 +73,8 @@
             "id": 4,
             "address": "127.0.0.1",
             "port": "8402",
+            "tablaHash": [],
+            "sizeTabla": 0,
             "nodoDerecha": [
                 {
                     "addressD": "127.0.0.1"
@@ -88,6 +96,8 @@
             "id": 5,
             "address": "127.0.0.1",
             "port": "8403",
+            "tablaHash": [],
+            "sizeTabla": 0,
             "nodoDerecha": [
                 {
                     "addressD": "127.0.0.1"

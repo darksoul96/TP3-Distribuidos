@@ -4,10 +4,10 @@ var nodos = JSON.parse(fs.readFileSync("./config/nodos_tracker.json", "utf8"))[
 ];
 var childProcess = require("child_process");
 
-function runScript(scriptPath, ip, port, callback) {
+function runScript(scriptPath, args, callback) {
   // keep track of whether callback has been invoked to prevent multiple invocations
   var invoked = false;
-  var process = childProcess.fork(scriptPath, ip, port);
+  var process = childProcess.fork(scriptPath, args);
   // listen for errors as they may prevent the exit event from firing
   process.on("error", function (err) {
     if (invoked) return;
@@ -24,7 +24,7 @@ function runScript(scriptPath, ip, port, callback) {
 }
 
 nodos.forEach(function (nodo) {
-  runScript("./tracker.js", nodo.address, nodo.port, function (err) {
+  runScript("./tracker.js", [nodo.address, nodo.port], function (err) {
     if (err) throw err;
     console.log("finished running some-script.js");
   });

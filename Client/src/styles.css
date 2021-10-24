@@ -170,24 +170,31 @@ body {
     
     .formulario {
         display: inline-block;
+        opacity: 1;
         text-decoration: none;
-        border: 2px solid #263238;
         color: #263238; 
         pointer-events: auto;
         line-height: 40px; 
         position: relative;
         padding: 0 50px;
-        box-sizing: border-box;
         margin: 0;
         user-select: none;
         overflow: hidden;
         border-radius: 50px;
         font-size: 20px;
-        
     }
 
-    .formulario:start {
-        background-color: #29b0ee;
-    transition: all 800ms cubic-bezier(0.190, 1.000, 0.560, 1.000);
-    transform: translate3d( 0, -100%, 0 );
+    .panel#panel_form {
+        transition: all 700ms;
+        opacity: 0.5;
+        z-index: 1;
+        background: radial-gradient(ellipse at center, rgba(255,255,255,1) 0%,#abd3e2 100%); }
+    
+    
+        
+    .panel#panel_form:hover {
+        transition: all 700ms;
+        opacity: 1;
     }
+
+    

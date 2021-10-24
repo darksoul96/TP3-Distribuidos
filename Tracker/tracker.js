@@ -24,14 +24,12 @@ const initTracker = async function () {
     fs.readFileSync("./config/nodos_tracker.json", "utf8")
   )["nodos"];
   let index = nodos.findIndex((nodo) => nodo.id == id);
-  console.log("ADDRESS: " + nodos[index].address);
   localaddress = nodos[index].address;
   localport = nodos[index].port;
   ht.loadTable(nodos[index].tablaHash);
   ht.setSize(nodos[index].sizeTabla);
   nodoIzquierda = nodos[index].nodoIzquierda;
   nodoDerecha = nodos[index].nodoDerecha;
-  console.log("ID: " + id);
   trackerClient.bind({
     address: localaddress,
     port: localport,

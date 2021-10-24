@@ -2,23 +2,103 @@
     "nodos": [
         {
             "address": "127.0.0.1",
-            "port": "8399"
+            "port": "8399",
+            "nodoDerecha": [
+                {
+                    "addressD": "127.0.0.1"
+                },
+                {
+                    "portD": "8400"
+                }
+            ],
+            "nodoIzquierda": [
+                {
+                    "addressD": "127.0.0.1"
+                },
+                {
+                    "portD": "8403"
+                }
+            ]
         },
         {
             "address": "127.0.0.1",
-            "port": "8400"
+            "port": "8400",
+            "nodoDerecha": [
+                {
+                    "addressD": "127.0.0.1"
+                },
+                {
+                    "portD": "8401"
+                }
+            ],
+            "nodoIzquierda": [
+                {
+                    "addressD": "127.0.0.1"
+                },
+                {
+                    "portD": "8399"
+                }
+            ]
         },
         {
             "address": "127.0.0.1",
-            "port": "8401"
+            "port": "8401",
+            "nodoDerecha": [
+                {
+                    "addressD": "127.0.0.1"
+                },
+                {
+                    "portD": "8402"
+                }
+            ],
+            "nodoIzquierda": [
+                {
+                    "addressD": "127.0.0.1"
+                },
+                {
+                    "portD": "8400"
+                }
+            ]
         },
         {
             "address": "127.0.0.1",
-            "port": "8402"
+            "port": "8402",
+            "nodoDerecha": [
+                {
+                    "addressD": "127.0.0.1"
+                },
+                {
+                    "portD": "8403"
+                }
+            ],
+            "nodoIzquierda": [
+                {
+                    "addressD": "127.0.0.1"
+                },
+                {
+                    "portD": "8401"
+                }
+            ]
         },
         {
             "address": "127.0.0.1",
-            "port": "8403"
+            "port": "8403",
+            "nodoDerecha": [
+                {
+                    "addressD": "127.0.0.1"
+                },
+                {
+                    "portD": "8399"
+                }
+            ],
+            "nodoIzquierda": [
+                {
+                    "addressD": "127.0.0.1"
+                },
+                {
+                    "portD": "8402"
+                }
+            ]
         }
     ]
 }

@@ -1,6 +1,7 @@
 {
     "nodos": [
         {
+            "id": 1,
             "address": "127.0.0.1",
             "port": "8399",
             "nodoDerecha": [
@@ -21,6 +22,7 @@
             ]
         },
         {
+            "id": 2,
             "address": "127.0.0.1",
             "port": "8400",
             "nodoDerecha": [
@@ -41,6 +43,7 @@
             ]
         },
         {
+            "id": 3,
             "address": "127.0.0.1",
             "port": "8401",
             "nodoDerecha": [
@@ -61,6 +64,7 @@
             ]
         },
         {
+            "id": 4,
             "address": "127.0.0.1",
             "port": "8402",
             "nodoDerecha": [
@@ -81,6 +85,7 @@
             ]
         },
         {
+            "id": 5,
             "address": "127.0.0.1",
             "port": "8403",
             "nodoDerecha": [

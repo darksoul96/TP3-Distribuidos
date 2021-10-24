@@ -28,6 +28,8 @@ var nodoIzquierda = {
     portI = null
 }
 
+var cantidadNodosArchivos = [0, 0];
+
 trackerClient.on("message", (msg, info) => {
     console.log(
         `Recibio el mensaje: ${msg} de la direccion: ${info.address} con puerto: ${info.port}`

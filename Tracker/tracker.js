@@ -40,9 +40,9 @@ const initTracker = async function () {
         excluse: true,
     });
     var arraycantidad = [0, 0, id];
-    count(arraycantidad, nodoDerecha);
+    count(arraycantidad, nodoDerecha); //paso un array donde llevo el id inicial y 2 valores que sumo
     cantidadEntradadas = Math.round(arraycantidad[0] / arraycantidad[1]);
-    console.log(cantidadEntradadas);
+    //console.log(cantidadEntradadas);
 }
 
 initTracker();

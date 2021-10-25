@@ -39,9 +39,9 @@ const initTracker = async function () {
         port: localport,
         excluse: true,
     });
-    var arraycantidad = [0, 0, id];
-    count(arraycantidad, nodoDerecha); //paso un array donde llevo el id inicial y 2 valores que sumo
-    cantidadEntradadas = Math.round(arraycantidad[0] / arraycantidad[1]);
+    //var arraycantidad = [0, 0, id];
+    //count(arraycantidad, nodoDerecha); //paso un array donde llevo el id inicial y 2 valores que sumo
+    //cantidadEntradadas = Math.round(arraycantidad[0] / arraycantidad[1]);
     //console.log(cantidadEntradadas);
 }
 
@@ -89,6 +89,7 @@ trackerClient.on("/file/${id}/store", (msg, info) => {
     console.log(ht.list());
 });
 
+/*
 trackerClient.on("/count", (msg, info) => {
     msgstr = JSON.parse(msg);
     if (msgstr[2] != id) {
@@ -102,20 +103,21 @@ trackerClient.on("/count", (msg, info) => {
         });
     }
 });
-
-
+*/
+/*
 var entraEstaTabla = () => {
     (ht.getSize() <= cantidadEntradadas) ? true : false;
 }
 
 var count = (cantidad, nodoDerecha) => {
-    client.send(/*"/count", */JSON.stringify(cantidad), nodoDerecha.portD, nodoDerecha.addressD, (err) => {
+    client.send(/"/count", JSON.stringify(cantidad), nodoDerecha.portD, nodoDerecha.addressD, (err) => {
         if (err) {
             console.log(err);
             res.status(500).send("Error loading file: " + err.message);
         }
     });
 }
+*/
 /*
 function loadEntry(hashEntry, msg) {
     hashEntry.hash = msg.hash;

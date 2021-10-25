@@ -25,9 +25,13 @@ function runScript(scriptPath, args, callback) {
 
 async function createTrackers() {
   for (var i = 0; i < nodos.length; i++) {
-    await runScript("./tracker.js", [nodos[i].id], function (err) {
-      if (err) throw err;
-    });
+    await runScript(
+      "./tracker.js",
+      [nodos[i].id, nodos.length],
+      function (err) {
+        if (err) throw err;
+      }
+    );
     console.log("Tracker: " + nodos[i].id);
   }
   console.log("Finished loading trackers");

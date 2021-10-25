@@ -5,8 +5,8 @@ const dgram = require("dgram");
 const trackerClient = udp.createSocket("udp4");
 const process = require("process");
 const args = process.argv;
-1;
 const client = dgram.createSocket("udp4");
+const cantidadTrackers = args[3];
 
 var localaddress, localport, id, cantidadEntradadas;
 var nodoDerecha = {
@@ -22,6 +22,18 @@ var nodoIzquierda = {
 if (args.length > 2) id = args[2];
 else id = 1;
 
+function setDomain() {
+  let div = Math.floor(127 / cantidadTrackers);
+  if (id != cantidadTrackers) {
+    let inicio = id - 1 * div;
+    let fin = id * div;
+    ht.setDomain(inicio, fin);
+  } else {
+    let inicio = id - 1 * div;
+    ht.setDomain(inicio, 127);
+  }
+}
+
 const initTracker = async function () {
   var nodos = await JSON.parse(
     fs.readFileSync("./config/nodos_tracker.json", "utf8")
@@ -32,6 +44,7 @@ const initTracker = async function () {
   localport = nodos[index].port;
   nodoIzquierda = nodos[index].nodoIzquierda;
   nodoDerecha = nodos[index].nodoDerecha;
+  setDomain();
   console.log("ID: " + id);
   trackerClient.bind({
     address: localaddress,

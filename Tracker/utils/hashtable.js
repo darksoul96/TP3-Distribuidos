@@ -2,6 +2,7 @@ class HashTable {
   constructor() {
     this.table = new Array(127);
     this.size = 0;
+    this.domain = [0, 127];
   }
 
   _hash(key) {
@@ -12,10 +13,18 @@ class HashTable {
     return hash % this.table.length;
   }
 
+  setDomain(start, end) {
+    this.domain = [start, end];
+  }
+
   set(key, value) {
     const index = this._hash(key);
-    this.table[index] = [key, value];
-    this.size++;
+    if (index >= this.domain[0] && index < this.domain[1]) {
+      this.table[index] = [key, value];
+      this.size++;
+    } else {
+      return false;
+    }
   }
 
   get(key) {

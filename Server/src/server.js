@@ -10,12 +10,12 @@ const server = app.listen(portcs, () => {
   console.log("Server on");
 });
 
-var trackerFile = {
-  hash: null,
+var trackerFileStore = {
+  id: null,
   filename: "",
   filesize: 0,
-  nodeIP: "",
-  nodePort: "",
+  parIP: "",
+  parPort: "",
 };
 
 app.use(cors());
@@ -28,8 +28,13 @@ app.get("/", (req, res) => {
 app.post("/file/", (req, res) => {
   console.log("Recibe archivo: \n");
   console.log(req.body);
-  loadFile(trackerFile, req.body);
-  client.send(JSON.stringify(trackerFile), portst, "localhost", (err) => {
+  loadFileStore(trackerFileStore, req.body);
+  let body = JSON.stringify(trackerFileStore);
+  let sendmsg = JSON.stringify({
+    route: `/file/${trackerFileStore.id}/store`,
+    body: body,
+  });
+  client.send(sendmsg, portst, "localhost", (err) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error loading file: " + err.message);
@@ -39,12 +44,12 @@ app.post("/file/", (req, res) => {
   res.end();
 });
 
-function loadFile(trackerFile, file) {
-  trackerFile.filename = file.filename;
-  trackerFile.filesize = file.filesize;
-  trackerFile.nodeIP = file.nodeIP;
-  trackerFile.nodePort = file.nodePort;
+function loadFileStore(trackerFileStore, file) {
+  trackerFileStore.filename = file.filename;
+  trackerFileStore.filesize = file.filesize;
+  trackerFileStore.parIP = file.nodeIP;
+  trackerFileStore.parPort = file.nodePort;
   let hash = crypto.createHash("sha1");
   hash.update(file.filename + Math.round(file.filesize).toString());
-  trackerFile.hash = hash.digest("hex");
+  trackerFileStore.id = hash.digest("hex");
 }

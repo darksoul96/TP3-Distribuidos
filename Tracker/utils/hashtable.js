@@ -22,6 +22,7 @@ class HashTable {
     if (index >= this.domain[0] && index < this.domain[1]) {
       this.table[index] = [key, value];
       this.size++;
+      return true;
     } else {
       return false;
     }

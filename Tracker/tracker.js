@@ -43,7 +43,7 @@ const initTracker = async function () {
     count(arraycantidad, nodoDerecha);
     cantidadEntradadas = Math.round(arraycantidad[0] / arraycantidad[1]);
     console.log(cantidadEntradadas);
-};
+}
 
 initTracker();
 

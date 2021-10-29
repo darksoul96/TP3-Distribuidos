@@ -119,13 +119,25 @@ trackerClient.on("message", (msg, info) => {
         }
       );
     } else {
-      console.log("No lo encontró en este tracker, lo pasa al siguiente");
-      client.send(msg, nodoDerecha.portD, nodoDerecha.addressD, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).send("Error loading file: " + err.message);
-        }
-      });
+
+      if ((localaddress != mensajeJson.originIP) && (localport != mensajeJson.originPort)) {
+        console.log("No lo encontró en este tracker, lo pasa al siguiente");
+        client.send(msg, nodoDerecha.portD, nodoDerecha.addressD, (err) => {
+          if (err) {
+            console.log(err);
+            res.status(500).send("Error loading file: " + err.message);
+          }
+        });
+      }
+      else {
+        console.log("No lo encontró en ningun tracker");
+        client.send("NOT_FOUND", datosServer.port, datosServer.address, (err) => {
+          if (err) {
+            console.log(err);
+            res.status(500).send("Error loading file: " + err.message);
+          }
+        });
+      }
     }
   }
 });

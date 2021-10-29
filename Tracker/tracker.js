@@ -1,15 +1,20 @@
-const udp = require("dgram");
+const dgram = require("dgram");
 const fs = require("fs");
 var ht = require("./utils/hashtable.js");
 const dgram = require("dgram");
-const trackerClient = udp.createSocket("udp4");
+const trackerClient = dgram.createSocket("udp4");
 const process = require("process");
 const args = process.argv;
 const client = dgram.createSocket("udp4");
 const cantidadTrackers = args[3];
 const sizeDHT = 127;
 
-var localaddress, localport, id, cantidadEntradadas;
+var localaddress, localport, id;
+const datosServer = {
+  address: "localhost",
+  port: 8081,
+}
+
 var nodoDerecha = {
   addressD: null,
   portD: null,
@@ -72,6 +77,7 @@ trackerClient.on("message", (msg, info) => {
   let mensaje = JSON.parse(msg);
   let mensajeJson = JSON.parse(mensaje.body);
   let mensajeRuta = mensaje.route.toString();
+  //INTERFAZ STORE tracker-tracker
   if (mensajeRuta.includes("/store") && mensajeRuta.includes("/file")) {
     let arrayInfo = {
       filename: mensajeJson.filename,
@@ -87,6 +93,40 @@ trackerClient.on("message", (msg, info) => {
         }
       });
     } else console.log(ht.list());
+  }
+  //INTERFAZ SEARCH
+  if (mensajeRuta.includes("/file/:id")) {
+    let arrayInfo = ht.get(mensajeJson.id);   //Asumo que id es el Hash del archivo
+    if (arrayInfo != null) {
+      let bodyArchivo = {          //el mensaje de respuesta es con lo que se va a armar el .torrente
+        filename: arrayInfo.filename,   //hay que ver si pasamos el "id" o el name y size (posible modificacion)
+        filesize: arrayInfo.size,
+        trackerIP: localaddress,        //se pasa el ip del tracker actual
+        trackerPort: localport,         //se pasa el puerto del tracker actual
+      };
+      let body = JSON.stringify(bodyArchivo);
+      let mensajeRespuestaJson = JSON.stringify({
+        messageId: "",
+        route: `/file/${mensajeJson.id}/found`,
+        body: body,
+      });
+      client.send(
+        mensajeRespuestaJson, datosServer.port, datosServer.address, (err) => {
+          if (err) {
+            console.log(err);
+            res.status(500).send("Error loading file: " + err.message);
+          }
+        }
+      );
+    } else {
+      console.log("No lo encontró en este tracker, lo pasa al siguiente");
+      client.send(msg, nodoDerecha.portD, nodoDerecha.addressD, (err) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send("Error loading file: " + err.message);
+        }
+      });
+    }
   }
 });
 

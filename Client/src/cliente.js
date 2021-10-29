@@ -1,7 +1,6 @@
 const url = "http://localhost:8080";
 
 const cargaFile = () => {
-  console.log("hola");
   fid = document.getElementById("fid").value;
   fname = document.getElementById("fname").value;
   fsize = document.getElementById("fsize").value;
@@ -24,6 +23,22 @@ const cargaFile = () => {
     body: JSON.stringify(file),
   })
     .then((response) => response.text())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+};
+
+const buscaFile = () => {
+  const post = fetch(url + "/file/" + fid, {
+    method: "GET",
+    headers: {
+      "Content-Type": "text/plain",
+    },
+  })
+    .then((response) => response.json())
     .then((data) => {
       console.log("Success:", data);
     })

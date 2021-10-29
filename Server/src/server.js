@@ -3,11 +3,18 @@ const cors = require("cors");
 const crypto = require("crypto");
 const dgram = require("dgram");
 const client = dgram.createSocket("udp4");
-const portcs = 8080;
-const portst = 8399;
+const portcs = 8080; // Puerto del server en la comunicacion Cliente - Servidor
+const portst = 8399; // Puerto del tracker en la comunicacion tracker - Servidor
+const iptracker = "localhost"; //
 const app = express();
 const server = app.listen(portcs, () => {
   console.log("Server on");
+});
+
+client.bind({
+  address: "localhost",
+  port: 8081,
+  excluse: true,
 });
 
 var trackerFileStore = {
@@ -25,6 +32,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+// INTERFAZ STORE FILE
 app.post("/file/", (req, res) => {
   console.log("Recibe archivo: \n");
   console.log(req.body);
@@ -34,7 +42,7 @@ app.post("/file/", (req, res) => {
     route: `/file/${trackerFileStore.id}/store`,
     body: body,
   });
-  client.send(sendmsg, portst, "localhost", (err) => {
+  client.send(sendmsg, portst, iptracker, (err) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error loading file: " + err.message);
@@ -42,6 +50,35 @@ app.post("/file/", (req, res) => {
   });
   res.status(201).send("File Recieved");
   res.end();
+});
+
+//INTERFAZ SEARCH FILE
+app.get("/file/:id", (req, res) => {
+  console.log("Recibe solicitud de descarga archivo: \n");
+  console.log(req.body);
+  let sendmsg = JSON.stringify({
+    messageId: "",
+    route: `/file/${req.params.id}`, // En realidad es el hash, no el id.
+    originIP: iptracker,
+    originPort: portst,
+  });
+  client.send(sendmsg, portst, iptracker, (err, response) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error searching file: " + err.message);
+      res.end();
+    }
+    response = JSON.parse(response);
+  });
+  client.on("message", (msg) => {
+    console.log("Recibe archivo: \n");
+    console.log(msg);
+    let msgObj = JSON.parse(msg);
+    if (msgObj.route.includes("found")) {
+      res.status(201).send(msg);
+      res.end();
+    }
+  });
 });
 
 function loadFileStore(trackerFileStore, file) {

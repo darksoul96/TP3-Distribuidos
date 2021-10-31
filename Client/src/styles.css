@@ -344,7 +344,7 @@ body {
         z-index: 1;
         background: radial-gradient(ellipse at center, rgba(255,255,255,1) 0%,#68b3d1 100%); }
     
-    .panel#panel_form_subida {
+    .panel#panel_form_listar {
         transition: all 700ms;
         opacity: 1;
         z-index: 1;

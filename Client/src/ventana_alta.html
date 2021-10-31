@@ -9,19 +9,30 @@
 
 <body>
   <div class="panel" id="panel_form">
-    <div class="formulario" id="formulario_alta">
+    <div class="formulario" id="formulario_alta"
+      style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif ">
       <form name="File-Form" onsubmit="cargaFile();return false">
-        <label>filename: </label><input type="text" name="fname" id="fname" /><br />
-        <label>filesize: </label><input type="text" name="fsize" id="fsize" /><br />
-        <label>nodeIP: </label><input type="text" name="fnodeip" id="fnodeip" /><br />
-        <label>nodePort: </label><input type="text" name="fnodeport" id="fnodeport" /><br />
+        <h3>Formulario de subida de archivos</h3>
+        <br>
+        <label for="nombre">Nombre del archivo:
+
+          <input type="text" name="fname" id="fname" />
+        </label>
+        <br>
+        <label for="size">tamaño (en bytes):
+          <input type="text" name="fsize" id="fsize" />
+        </label><br>
+        <label for="ip">IP del nodo:
+          <input type="text" name="fnodeip" id="fnodeip" />
+        </label><br>
+        <label for="puerto">Puerto del nodo:
+          <input type="text" name="fnodeport" id="fnodeport" />
+        </label><br>
         <button type="submit">Subir</button>
       </form>
     </div>
-    <a href="index.html">
-      <p
-        style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 20px; padding-top: 20px; text-align: center; color: rgb(2, 32, 32); margin-top: 50px;">
-        Volver</p>
+    <a class="boton__volver" href="index.html">
+      Volver
     </a>
     <script defer type="text/javascript" src="cliente.js"></script>
   </div>

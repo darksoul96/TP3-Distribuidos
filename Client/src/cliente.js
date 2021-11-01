@@ -1,14 +1,12 @@
 const url = "http://localhost:8080";
 
 const cargaFile = () => {
-  fid = document.getElementById("fid").value;
   fname = document.getElementById("fname").value;
   fsize = document.getElementById("fsize").value;
   fnodeip = document.getElementById("fnodeip").value;
   fnodeport = document.getElementById("fnodeport").value;
 
   let file = {
-    id: fid,
     filename: fname,
     filesize: fsize,
     nodeIP: fnodeip,
@@ -32,6 +30,8 @@ const cargaFile = () => {
 };
 
 const buscaFile = () => {
+  console.log("buscaFile");
+  fid = "9768a09a79f9e805441d3144c4918eae63adb08f";
   const post = fetch(url + "/file/" + fid, {
     method: "GET",
     headers: {

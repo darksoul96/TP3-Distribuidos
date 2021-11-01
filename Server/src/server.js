@@ -55,7 +55,7 @@ app.post("/file/", (req, res) => {
 //INTERFAZ SEARCH FILE
 app.get("/file/:id", (req, res) => {
   console.log("Recibe solicitud de descarga archivo: \n");
-  console.log(req.body);
+  console.log(req.params.id);
   let sendmsg = JSON.stringify({
     messageId: "",
     route: `/file/${req.params.id}`, // En realidad es el hash, no el id.
@@ -67,16 +67,23 @@ app.get("/file/:id", (req, res) => {
       console.log(err);
       res.status(500).send("Error searching file: " + err.message);
       res.end();
+      client.close();
     }
     response = JSON.parse(response);
   });
   client.on("message", (msg) => {
-    console.log("Recibe archivo: \n");
-    console.log(msg);
-    let msgObj = JSON.parse(msg);
-    if (msgObj.route.includes("found")) {
-      res.status(201).send(msg);
-      res.end();
+    console.log("Recibe respuesta de busqueda: \n");
+    if (msg.toString() == "NOT_FOUND") {
+      console.log("Archivo no encontrado");
+      res.status(404).send("File not found");
+      return res.end();
+    } else {
+      console.log(msg);
+      let msgObj = JSON.parse(msg);
+      if (msgObj.route.includes("found")) {
+        res.status(201).send(msg);
+        res.end();
+      }
     }
   });
 });
@@ -89,4 +96,5 @@ function loadFileStore(trackerFileStore, file) {
   let hash = crypto.createHash("sha1");
   hash.update(file.filename + Math.round(file.filesize).toString());
   trackerFileStore.id = hash.digest("hex");
+  console.log(trackerFileStore.id);
 }

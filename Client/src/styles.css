@@ -22,12 +22,12 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-family: 'Roboto Slab', serif; 
-    animation: animacion_con_transicion 1s ease-in;
+    animation: animacion_con_transicion 0.5s ease-in;
 }
 
 @keyframes animacion_con_transicion {
-    from {opacity: 0.4;
-    background-color: rgb(170, 217, 233);}
+    from {opacity: 0.5;
+    background-color: rgb(211, 222, 226);}
     to {opacity: 1}
     
 }

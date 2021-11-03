@@ -37,7 +37,7 @@ const cargaFile = () => {
 //CUANDO PRESIONE EL BOTON LISTAR, VA A LLAMARSE ESTE METODO
 const listaFile = () => {
   console.log("listaFile");
-  const post = fetch("/file", {
+  const get = fetch("/file", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

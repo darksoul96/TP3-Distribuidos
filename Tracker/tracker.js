@@ -131,3 +131,11 @@ trackerClient.on("message", (msg, info) => {
 });
 
 
+const appendElementos = (array) => {
+  let arrayTabla = ht.list();
+  for (let i = 0; i < arrayTabla.length; i++) {
+    if (!array.contains(arrayTabla[i].id)) {
+      array.push(arrayTabla[i]);
+    }
+  }
+};

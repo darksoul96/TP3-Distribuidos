@@ -45,9 +45,25 @@ const listaFile = () => {
   })
     .then((response) => response.json())
     .then((data) => {     //data es un array de objetos para poder listarlos
+      arrayListar = JSON.parse(data);
+      generateHTML_LIST(arrayListar);
       console.log("Success:", data);
     })
     .catch((error) => {
       console.error("Error:", error);
     });
 };
+
+
+const generateHTML_LIST = (arrayListar) => {
+  let htmlContent = "";
+  for (let i = 0; i < arrayListar.length; i++) {
+    let file = arrayListar[i];
+    htmlContent += `
+    <tr>
+    <td>${file.filename}</td>
+    </tr>
+    `;
+  }
+  document.getElementById("lista_descargas").innerHTML = htmlContent;
+}

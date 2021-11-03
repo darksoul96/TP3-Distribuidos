@@ -75,13 +75,13 @@ app.get("/file", (req, res) => {
     }
     response = JSON.parse(response);
   });
-  client.on("message", (msg) => {
+  client.on("message", (msg) => { //Recibe respuesta del tracker
     console.log("Recibe respuesta de listar: \n");
     mensaje = JSON.parse(msg);  //Asumo que me llega el body con la lista de elementos y la ruta del mensaje es scan
     if (mensaje.route.contains("scan")) {
       let listaDescargas = mensaje.body.files;  //en el body esta la lista de archivos que fui haciendo append
-      let lista = JSON.stringify(listaDescargas); //convierto la lista a string para poder enviarla
-      app.send(lista);
+      let response = crearArrayResponse(listaDescargas);
+      app.send(JSON.stringify(response)); //convierto la lista a string para poder enviarla
       return res.end();
     }
   });
@@ -96,4 +96,18 @@ function loadFileStore(trackerFileStore, file) {
   hash.update(file.filename + Math.round(file.filesize).toString());
   trackerFileStore.id = hash.digest("hex");
   console.log(trackerFileStore.id);
+}
+
+const crearArrayResponse = (listaDescargas) => {  //Se usa para crear un array sólo con la info necesaria
+  let response = [];
+  for (let i = 0; i < listaDescargas.length; i++) {
+    let file = {
+      id: listaDescargas[i].id,
+      filename: listaDescargas[i].filename,
+      filesize: listaDescargas[i].filesize,
+    }
+    response.push(file);
+  }
+
+  return response;
 }

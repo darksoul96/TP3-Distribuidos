@@ -93,129 +93,41 @@ trackerClient.on("message", (msg, info) => {
       });
     } else console.log(ht.list());
   }
-  //INTERFAZ SEARCH
-  if (mensajeRuta.includes("/file/") && !mensajeRuta.includes("store")) {
-    console.log("entra a buscar");
-    //access hash of route
-    let hash = mensajeRuta.slice(6);
-    console.log(hash);
-    console.log(ht.get(hash));
-    let arrayInfo = ht.get(hash); //Asumo que id es el Hash del archivo
-    if (arrayInfo != null) {
-      let bodyArchivo = {
-        //el mensaje de respuesta es con lo que se va a armar el .torrente
-        filename: arrayInfo.filename, //hay que ver si pasamos el "id" o el name y size (posible modificacion)
-        filesize: arrayInfo.size,
-        trackerIP: localaddress, //se pasa el ip del tracker actual
-        trackerPort: localport, //se pasa el puerto del tracker actual
-      };
-      let body = JSON.stringify(bodyArchivo);
-      let mensajeRespuestaJson = JSON.stringify({
-        messageId: "",
-        route: `/file/${hash}/found`,
-        body: body,
-      });
-      client.send(
-        mensajeRespuestaJson,
-        datosServer.port,
-        datosServer.address,
-        (err) => {
-          if (err) {
-            console.log(err);
-            res.status(500).send("Error loading file: " + err.message);
-          }
+  //INTERFAZ SCAN
+  if (mensajeRuta.includes("/scan")) {  //tengo messageId, route, originIp, originPort, body(files[])
+
+    let mensajeBody = JSON.parse(mensaje.body);
+    let arrayArchivos = mensajeBody.files;
+    appendElementos(arrayArchivos);
+    let body = {
+      files: arrayArchivos,
+    };
+    let mensajeEnviar = {
+      messageId: mensaje.messageId,
+      route: mensaje.route,
+      originIp: mensaje.originIp,
+      originPort: mensaje.originPort,
+      body: body
+    };
+
+    if (((originIp != localaddress) && (originPort != localport) && (info.port != datosServer.port)) || ((info.port == datosServer.port))) {
+      client.send(JSON.stringify(mensajeEnviar), nodoDerecha.portD, nodoDerecha.addressD, (err) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send("Error loading file: " + err.message);
         }
-      );
-    } else {
-      console.log(info.address);
-      console.log(datosServer.address);
-      console.log(info.address === datosServer.address);
-      console.log(
-        info.address === datosServer.address && info.port === datosServer.port
-      );
-      if (
-        (info.address === datosServer.address &&
-          info.port === datosServer.port) ||
-        (localaddress != mensaje.originIP && localport != mensaje.originPort)
-      ) {
-        console.log(`No lo encontró en el tracker ${id}, lo pasa al siguiente`);
-        client.send(msg, nodoDerecha.portD, nodoDerecha.addressD, (err) => {
-          if (err) {
-            console.log(err);
-            res.status(500).send("Error loading file: " + err.message);
-          }
-        });
-      } else {
-        console.log("No lo encontró en ningun tracker");
-        client.send(
-          "NOT_FOUND",
-          datosServer.port,
-          datosServer.address,
-          (err) => {
-            if (err) {
-              console.log(err);
-              res.status(500).send("Error loading file: " + err.message);
-            }
-          }
-        );
-      }
+      });
     }
+    else {  //si es el tracker que envio el mensaje, devuelvo la respuesta al server
+      client.send(JSON.stringify(mensajeEnviar), datosServer.port, datosServer.address, (err) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send("Error loading file: " + err.message);
+        }
+      });
+    }
+
   }
 });
 
-//   if (entraEstaTabla()) {
-//     let arrayInfo = {
-//       filename: msgstr.filename,
-//       size: msgstr.filesize,
-//       par: { ip: msgstr.nodeIP, port: msgstr.nodePort },
-//     };
-//     ht.set(msgstr.hash, arrayInfo);
-//   } else {
-//     client.send(
-//       JSON.stringify(`/file/${msgstr.id}/store` + msg),
-//       msg.nodoDerecha.portD,
-//       msg.nodoDerecha.addressD,
-//       (err) => {
-//         if (err) {
-//           console.log(err);
-//           res.status(500).send("Error loading file: " + err.message);
-//         }
-//       }
-//     );
-//   }
-//   //console.log(ht.get(msg.hash));
-//   console.log(ht.list());
 
-// trackerClient.on("message", (msg, info) => {
-//   msgstr = JSON.parse(msg);
-//   if (msgstr[2] != id) {
-//     msgstr[0] += ht.getSize();
-//     msgstr[1] += 1;
-//     client.send(
-//       "/count",
-//       JSON.stringify(msgstr),
-//       nodoDerecha.portD,
-//       nodoDerecha.addressD,
-//       (err) => {
-//         if (err) {
-//           console.log(err);
-//           res.status(500).send("Error loading file: " + err.message);
-//         }
-//       }
-//     );
-//   }
-// });
-
-// var count = (cantidad, nodoDerecha) => {
-//   client.send(
-//     JSON.stringify(cantidad),
-//     nodoDerecha.portD,
-//     nodoDerecha.addressD,
-//     (err) => {
-//       if (err) {
-//         console.log(err);
-//         res.status(500).send("Error loading file: " + err.message);
-//       }
-//     }
-//   );
-// };

@@ -52,15 +52,19 @@ app.post("/file/", (req, res) => {
   res.end();
 });
 
-//INTERFAZ SEARCH FILE
-app.get("/file/:id", (req, res) => {
-  console.log("Recibe solicitud de descarga archivo: \n");
-  console.log(req.params.id);
+//INTERFAZ LISTAR FILE - Va a triggerear un scan entre los nodos tracker
+app.get("/file", (req, res) => {
+  console.log("Recibe solicitud de listar todos los archivos: \n");
+
+  let body = {
+    files: []
+  };
   let sendmsg = JSON.stringify({
     messageId: "",
-    route: `/file/${req.params.id}`, // En realidad es el hash, no el id.
+    route: "/scan",
     originIP: iptracker,
     originPort: portst,
+    body: body,
   });
   client.send(sendmsg, portst, iptracker, (err, response) => {
     if (err) {
@@ -72,18 +76,13 @@ app.get("/file/:id", (req, res) => {
     response = JSON.parse(response);
   });
   client.on("message", (msg) => {
-    console.log("Recibe respuesta de busqueda: \n");
-    if (msg.toString() == "NOT_FOUND") {
-      console.log("Archivo no encontrado");
-      res.status(404).send("File not found");
+    console.log("Recibe respuesta de listar: \n");
+    mensaje = JSON.parse(msg);  //Asumo que me llega el body con la lista de elementos y la ruta del mensaje es scan
+    if (mensaje.route.contains("scan")) {
+      let listaDescargas = mensaje.body.files;  //en el body esta la lista de archivos que fui haciendo append
+      let lista = JSON.stringify(listaDescargas); //convierto la lista a string para poder enviarla
+      app.send(lista);
       return res.end();
-    } else {
-      console.log(msg);
-      let msgObj = JSON.parse(msg);
-      if (msgObj.route.includes("found")) {
-        res.status(201).send(msg);
-        res.end();
-      }
     }
   });
 });

@@ -1,4 +1,9 @@
 const url = "http://localhost:8080";
+const botonListar = document.getElementById("boton_listar");
+
+
+botonListar.addEventListener("click", listaFile);
+
 
 const cargaFile = () => {
   fname = document.getElementById("fname").value;
@@ -29,17 +34,17 @@ const cargaFile = () => {
     });
 };
 
-const buscaFile = () => {
-  console.log("buscaFile");
-  fid = "9768a09a79f9e805441d3144c4918eae63adb08f";
-  const post = fetch(url + "/file/" + fid, {
+//CUANDO PRESIONE EL BOTON LISTAR, VA A LLAMARSE ESTE METODO
+const listaFile = () => {
+  console.log("listaFile");
+  const post = fetch("/file", {
     method: "GET",
     headers: {
-      "Content-Type": "text/plain",
+      "Content-Type": "application/json",
     },
   })
     .then((response) => response.json())
-    .then((data) => {
+    .then((data) => {     //data es un array de objetos para poder listarlos
       console.log("Success:", data);
     })
     .catch((error) => {

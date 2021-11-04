@@ -96,18 +96,17 @@ trackerClient.on("message", (msg, info) => {
   //INTERFAZ SCAN
   if (mensajeRuta.includes("/scan")) {  //tengo messageId, route, originIp, originPort, body(files[])
 
-    let mensajeBody = JSON.parse(mensaje.body);
+    console.log("Entra al scan");
+    let mensajeBody = mensaje.body;
     let arrayArchivos = mensajeBody.files;
     appendElementos(arrayArchivos);
-    let body = {
-      files: arrayArchivos,
-    };
+    files = arrayArchivos;
     let mensajeEnviar = {
       messageId: mensaje.messageId,
       route: mensaje.route,
       originIp: mensaje.originIp,
       originPort: mensaje.originPort,
-      body: body
+      body: files
     };
 
     if (((originIp != localaddress) && (originPort != localport) && (info.port != datosServer.port)) || ((info.port == datosServer.port))) {
@@ -134,7 +133,7 @@ trackerClient.on("message", (msg, info) => {
 const appendElementos = (array) => {
   let arrayTabla = ht.list();
   for (let i = 0; i < arrayTabla.length; i++) {
-    if (!array.contains(arrayTabla[i].id)) {
+    if (true/*!array.contains(arrayTabla[i].id)*/) {
       array.push(arrayTabla[i]);
     }
   }

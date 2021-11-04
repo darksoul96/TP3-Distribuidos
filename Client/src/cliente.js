@@ -1,9 +1,4 @@
 const url = "http://localhost:8080";
-const botonListar = document.getElementById("boton_listar");
-
-
-botonListar.addEventListener("click", listaFile);
-
 
 const cargaFile = () => {
   fname = document.getElementById("fname").value;
@@ -37,7 +32,7 @@ const cargaFile = () => {
 //CUANDO PRESIONE EL BOTON LISTAR, VA A LLAMARSE ESTE METODO
 const listaFile = () => {
   console.log("listaFile");
-  const get = fetch("/file", {
+  const get = fetch(url + "/file", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -45,16 +40,16 @@ const listaFile = () => {
   })
     .then((response) => response.json())
     .then((data) => {     //data es un array de objetos para poder listarlos
+      console.log("Success:", data);
       arrayListar = JSON.parse(data);
       generateHTML_LIST(arrayListar);
-      console.log("Success:", data);
     })
     .catch((error) => {
       console.error("Error:", error);
     });
 };
 
-
+//NO SE SI ANDA ESTO PARA GENERAR HTML, HAY QUE PROBARLO
 const generateHTML_LIST = (arrayListar) => {
   let htmlContent = "";
   for (let i = 0; i < arrayListar.length; i++) {
@@ -63,7 +58,8 @@ const generateHTML_LIST = (arrayListar) => {
     <tr>
     <td>${file.filename}</td>
     </tr>
+    <p style="font-size=35 font-color=red"> HELLO </p>
     `;
   }
-  document.getElementById("lista_descargas").innerHTML = htmlContent;
+  document.getElementById("lista_descargas").innerHTML += htmlContent;
 }

@@ -56,15 +56,14 @@ app.post("/file/", (req, res) => {
 app.get("/file", (req, res) => {
   console.log("Recibe solicitud de listar todos los archivos: \n");
 
-  let body = {
-    files: []
-  };
+  let files = [];
+
   let sendmsg = JSON.stringify({
     messageId: "",
     route: "/scan",
     originIP: iptracker,
     originPort: portst,
-    body: body,
+    body: files,
   });
   client.send(sendmsg, portst, iptracker, (err, response) => {
     if (err) {
@@ -74,6 +73,7 @@ app.get("/file", (req, res) => {
       client.close();
     }
     response = JSON.parse(response);
+    console.log(response);
   });
   client.on("message", (msg) => { //Recibe respuesta del tracker
     console.log("Recibe respuesta de listar: \n");

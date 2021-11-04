@@ -94,11 +94,12 @@ trackerClient.on("message", (msg, info) => {
     } else console.log(ht.list());
   }
   //INTERFAZ SCAN
-  if (mensajeRuta.includes("/scan")) {  //tengo messageId, route, originIp, originPort, body(files[])
+  if (mensajeRuta.includes("/scan")) {
+    //tengo messageId, route, originIp, originPort, body(files[])
 
     console.log("Entra al scan");
-    let mensajeBody = mensaje.body;
-    let arrayArchivos = mensajeBody.files;
+    let arrayArchivos = mensaje.body;
+    console.log(arrayArchivos);
     appendElementos(arrayArchivos);
     files = arrayArchivos;
     let mensajeEnviar = {
@@ -106,34 +107,47 @@ trackerClient.on("message", (msg, info) => {
       route: mensaje.route,
       originIp: mensaje.originIp,
       originPort: mensaje.originPort,
-      body: files
+      body: files,
     };
 
-    if (((originIp != localaddress) && (originPort != localport) && (info.port != datosServer.port)) || ((info.port == datosServer.port))) {
-      client.send(JSON.stringify(mensajeEnviar), nodoDerecha.portD, nodoDerecha.addressD, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).send("Error loading file: " + err.message);
+    if (
+      (originIp != localaddress &&
+        originPort != localport &&
+        info.port != datosServer.port) ||
+      info.port == datosServer.port
+    ) {
+      client.send(
+        JSON.stringify(mensajeEnviar),
+        nodoDerecha.portD,
+        nodoDerecha.addressD,
+        (err) => {
+          if (err) {
+            console.log(err);
+            res.status(500).send("Error loading file: " + err.message);
+          }
         }
-      });
-    }
-    else {  //si es el tracker que envio el mensaje, devuelvo la respuesta al server
-      client.send(JSON.stringify(mensajeEnviar), datosServer.port, datosServer.address, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).send("Error loading file: " + err.message);
+      );
+    } else {
+      //si es el tracker que envio el mensaje, devuelvo la respuesta al server
+      client.send(
+        JSON.stringify(mensajeEnviar),
+        datosServer.port,
+        datosServer.address,
+        (err) => {
+          if (err) {
+            console.log(err);
+            res.status(500).send("Error loading file: " + err.message);
+          }
         }
-      });
+      );
     }
-
   }
 });
-
 
 const appendElementos = (array) => {
   let arrayTabla = ht.list();
   for (let i = 0; i < arrayTabla.length; i++) {
-    if (true/*!array.contains(arrayTabla[i].id)*/) {
+    if (true /*!array.contains(arrayTabla[i].id)*/) {
       array.push(arrayTabla[i]);
     }
   }

@@ -98,8 +98,9 @@ trackerClient.on("message", (msg, info) => {
     //tengo messageId, route, originIp, originPort, body(files[])
 
     console.log("Entra al scan");
-    let arrayArchivos = mensaje.body;
-    console.log(arrayArchivos);
+    var arrayArchivos = [];
+    arrayArchivos = mensaje.body;
+    //console.log(arrayArchivos);
     appendElementos(arrayArchivos);
     files = arrayArchivos;
     let mensajeEnviar = {
@@ -146,9 +147,13 @@ trackerClient.on("message", (msg, info) => {
 
 const appendElementos = (array) => {
   let arrayTabla = ht.list();
-  for (let i = 0; i < arrayTabla.length; i++) {
-    if (arrayTabla[i] != null) {
-      array.push(arrayTabla[i]);
+  console.log(arrayTabla);
+  console.log(array);
+  arrayTabla.forEach((element) => {
+    if (element != undefined) {
+      console.log("---------ELEMENT VALUE!!!!!!!!!!!!!!!!!!!! ========");
+      console.log(element.value[0]);
+      array.push(element);
     }
-  }
+  });
 };

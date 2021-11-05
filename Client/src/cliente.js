@@ -39,10 +39,13 @@ const listaFile = () => {
     },
   })
     .then((response) => response.json())
-    .then((data) => {     //data es un array de objetos para poder listarlos
+    .then((data) => {
+      //data es un array de objetos para poder listarlos
       console.log("Success:", data);
-      arrayListar = JSON.parse(data);
-      generateHTML_LIST(arrayListar);
+      if (data != null && data.length > 0) {
+        arrayListar = JSON.parse(data);
+        generateHTML_LIST(arrayListar);
+      }
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -62,4 +65,4 @@ const generateHTML_LIST = (arrayListar) => {
     `;
   }
   document.getElementById("lista_descargas").innerHTML += htmlContent;
-}
+};

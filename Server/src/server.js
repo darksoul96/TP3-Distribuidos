@@ -79,10 +79,11 @@ app.get("/file", (req, res) => {
     //Recibe respuesta del tracker
     console.log("Recibe respuesta de listar: \n");
     mensaje = JSON.parse(msg); //Asumo que me llega el body con la lista de elementos y la ruta del mensaje es scan
+    console.log(mensaje);
     if (mensaje.route.includes("scan")) {
-      let listaDescargas = mensaje.body.files; //en el body esta la lista de archivos que fui haciendo append
+      let listaDescargas = mensaje.body; //en el body esta la lista de archivos que fui haciendo append
       let response = crearArrayResponse(listaDescargas);
-      app.send(JSON.stringify(response)); //convierto la lista a string para poder enviarla
+      res.send(JSON.stringify(response)); //convierto la lista a string para poder enviarla
       return res.end();
     }
   });

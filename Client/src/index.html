@@ -1,57 +1,53 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>FrontEnd Cliente</title>
-    <link rel="stylesheet" href="styles.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  </head>
 
-  <body>
-    <div class="panel" id="home">
-      <h1 class="header" id="header_main">Gestor de descarga de archivos</h1>
+<head>
+  <meta charset="utf-8" />
+  <title>FrontEnd Cliente</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
 
-      <!-- Navigation -->
-      <div class="menu">
-        <a class="menu__link" href="#slice" data-hover="Slice"
-          >Subir Archivos</a
-        >
-        <a class="menu__link" href="#slice2" data-hover="Slice"
-          >Buscar Archivos</a
-        >
-      </div>
+<body>
+  <div class="panel" id="home">
+    <h1 class="header" id="header_main">Gestor de descarga de archivos</h1>
 
-      <div class="panel" id="slice">
-        <div class="panel__content">
-          <div class="menu-subir-archivos">
-            <a
-              class="menu__link__subida"
-              href="ventana_alta.html"
-              href="#slice3"
-              >Subir</a
-            >
-            <br />
-            <br />
-            <a class="boton__volver" href="#home"> Volver </a>
-          </div>
-        </div>
-      </div>
+    <!-- Navigation -->
+    <div class="menu">
+      <a class="menu__link" href="#slice" data-hover="Slice">Subir Archivos</a>
+      <a class="menu__link" href="#slice2" data-hover="Slice">Buscar Archivos</a>
+    </div>
 
-      <div class="panel" id="slice2">
-        <div class="panel__content">
-          <a href="ventana_descargas.html">
-            <button class="boton__listar" onclick="listaFile();return false">
-              Listar todos los elementos
-            </button></a
-          >
-          <!-- Navigation <a class="menu__link__listar" href="ventana_descargas.html" href="#slice3" id="boton_listar"
-          onclick="listaFile();return false">Listar todos los elementos</a>-->
+    <div class="panel" id="slice">
+      <div class="panel__content">
+        <div class="menu-subir-archivos">
+          <a class="menu__link__subida" href="ventana_alta.html" href="#slice3">Subir</a>
           <br />
           <br />
           <a class="boton__volver" href="#home"> Volver </a>
         </div>
       </div>
     </div>
-    <script defer type="text/javascript" src="cliente.js"></script>
-  </body>
+
+    <div class="panel" id="slice2">
+      <div class="panel__content">
+
+        <button class="boton__listar" onclick="listaFile();return false">
+          Listar todos los elementos
+        </button>
+
+        <div class="download" id="lista_descargas">
+
+        </div>
+        <!-- Navigation <a class="menu__link__listar" href="ventana_descargas.html" href="#slice3" id="boton_listar"
+          onclick="listaFile();return false">Listar todos los elementos</a>-->
+        <br />
+        <br />
+        <a class="boton__volver" href="#home"> Volver </a>
+      </div>
+    </div>
+  </div>
+  <script defer type="text/javascript" src="cliente.js"></script>
+</body>
+
 </html>

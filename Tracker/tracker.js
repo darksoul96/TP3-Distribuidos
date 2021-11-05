@@ -111,8 +111,8 @@ trackerClient.on("message", (msg, info) => {
     };
 
     if (
-      (originIp != localaddress &&
-        originPort != localport &&
+      (mensaje.originIp != localaddress &&
+        mensaje.originPort != localport &&
         info.port != datosServer.port) ||
       info.port == datosServer.port
     ) {
@@ -147,7 +147,7 @@ trackerClient.on("message", (msg, info) => {
 const appendElementos = (array) => {
   let arrayTabla = ht.list();
   for (let i = 0; i < arrayTabla.length; i++) {
-    if (true /*!array.contains(arrayTabla[i].id)*/) {
+    if (arrayTabla[i] != null) {
       array.push(arrayTabla[i]);
     }
   }

@@ -83,7 +83,19 @@ app.get("/file", (req, res) => {
     if (mensaje.route.includes("scan")) {
       let listaDescargas = mensaje.body; //en el body esta la lista de archivos que fui haciendo append
       let response = crearArrayResponse(listaDescargas);
-      res.send(JSON.stringify(response)); //convierto la lista a string para poder enviarla
+
+      //res.send(JSON.stringify(response)); //convierto la lista a string para poder enviarla
+
+      /*Me armo un json asi nomas para ver si lo recibe*/
+      let json = {
+        messageId: "",
+        route: "/scan",
+        originIP: iptracker,
+        originPort: portst,
+        body: "Json generico",
+      };
+
+      res.send(JSON.stringify(json));
       return res.end();
     }
   });

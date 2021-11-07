@@ -42,10 +42,11 @@ const listaFile = () => {
     .then((data) => {
       //data es un array de objetos para poder listarlos
       console.log("Success:", data);
-      if (data != null && data.length > 0) {
-        arrayListar = JSON.parse(data);
-        generateHTML_LIST(arrayListar);
-      }
+      //if (data != null && data.length > 0) {
+      //arrayListar = JSON.parse(data);
+      let arrayListar = [];
+      generateHTML_LIST(arrayListar);
+      //}
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -67,5 +68,5 @@ const generateHTML_LIST = (arrayListar) => {
     <p style="font-size=35 font-color=red"> HELLO </p>
     `;
   }
-  document.getElementById("lista_descargas").innerHTML += htmlContent;
+  document.getElementById("lista_descargas").innerHTML += "HOLA";//htmlContent;
 };

@@ -56,10 +56,7 @@ const initTracker = async function () {
     port: localport,
     excluse: true,
   });
-  //var arraycantidad = [0, 0, id];
-  //count(arraycantidad, nodoDerecha); //paso un array donde llevo el id inicial y 2 valores que sumo
-  //cantidadEntradadas = Math.round(arraycantidad[0] / arraycantidad[1]);
-  //console.log(cantidadEntradadas);
+
 };
 
 initTracker();
@@ -94,7 +91,7 @@ trackerClient.on("message", (msg, info) => {
     } else console.log(ht.list());
   }
   //INTERFAZ SCAN
-  if (mensajeRuta.includes("/scan")) {
+  if (mensajeRuta.includes("/scan")) {    //ESTA ES LA PARTE QUE NO ANDA
     //tengo messageId, route, originIp, originPort, body(files[])
 
     console.log("Entra al scan");
@@ -152,7 +149,7 @@ const appendElementos = (array) => {
   arrayTabla.forEach((element) => {
     if (element != undefined) {
       console.log("---------ELEMENT VALUE!!!!!!!!!!!!!!!!!!!! ========");
-      console.log(element.value[0]);
+      console.log(element.value);
       array.push(element);
     }
   });

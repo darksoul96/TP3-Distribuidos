@@ -54,7 +54,7 @@ app.post("/file/", (req, res) => {
 
 //INTERFAZ LISTAR FILE - Va a triggerear un scan entre los nodos tracker
 app.get("/file", (req, res) => {
-  console.log("Recibe solicitud de listar todos los archivos: \n");
+  console.log("Recibe solicitud de listar todos los archivos: \n"); //aca llega el request
 
   let files = [];
 
@@ -73,11 +73,11 @@ app.get("/file", (req, res) => {
       client.close();
     }
     response = JSON.parse(response);
-    console.log(response);
+    //console.log(response);
   });
   client.on("message", (msg) => {
     //Recibe respuesta del tracker
-    console.log("Recibe respuesta de listar: \n");
+    console.log("Recibe respuesta de listar: \n");  //Llega a esta respuesta
     mensaje = JSON.parse(msg); //Asumo que me llega el body con la lista de elementos y la ruta del mensaje es scan
     console.log(mensaje);
     if (mensaje.route.includes("scan")) {

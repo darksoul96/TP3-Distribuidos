@@ -52,8 +52,10 @@ const listaFile = () => {
     });
 };
 
+
 //NO SE SI ANDA ESTO PARA GENERAR HTML, HAY QUE PROBARLO
 const generateHTML_LIST = (arrayListar) => {
+  window.alert("sometext");
   let htmlContent = "";
   for (let i = 0; i < arrayListar.length; i++) {
     let file = arrayListar[i];
@@ -61,6 +63,7 @@ const generateHTML_LIST = (arrayListar) => {
     <tr>
     <td>${file.filename}</td>
     </tr>
+    HELLO
     <p style="font-size=35 font-color=red"> HELLO </p>
     `;
   }

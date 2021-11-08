@@ -2,19 +2,12 @@ const express = require("express");
 const cors = require("cors");
 const crypto = require("crypto");
 const dgram = require("dgram");
-const client = dgram.createSocket("udp4");
 const portcs = 8080; // Puerto del server en la comunicacion Cliente - Servidor
 const portst = 8399; // Puerto del tracker en la comunicacion tracker - Servidor
 const iptracker = "localhost"; //
 const app = express();
 const server = app.listen(portcs, () => {
   console.log("Server on");
-});
-
-client.bind({
-  address: "localhost",
-  port: 8081,
-  excluse: true,
 });
 
 var trackerFileStore = {
@@ -27,10 +20,6 @@ var trackerFileStore = {
 
 app.use(cors());
 app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
 
 // INTERFAZ STORE FILE
 app.post("/file/", (req, res) => {
@@ -45,11 +34,11 @@ app.post("/file/", (req, res) => {
   client.send(sendmsg, portst, iptracker, (err) => {
     if (err) {
       console.log(err);
-      res.status(500).send("Error loading file: " + err.message);
+      return res.status(500).send("Error loading file: " + err.message);
     }
   });
-  res.status(201).send("File Recieved");
-  res.end();
+  return res.status(201).send("File Recieved");
+  //res.end();
 });
 
 //INTERFAZ LISTAR FILE - Va a triggerear un scan entre los nodos tracker
@@ -65,6 +54,10 @@ app.get("/file", (req, res) => {
     originPort: portst,
     body: files,
   });
+  const client = dgram.createSocket("udp4");
+  client.bind(() => {
+    console.log(client.address());
+  });
   client.send(sendmsg, portst, iptracker, (err, response) => {
     if (err) {
       console.log(err);
@@ -73,32 +66,36 @@ app.get("/file", (req, res) => {
       client.close();
     }
     response = JSON.parse(response);
-    //console.log(response);
   });
+  let any = Math.random();
   client.on("message", (msg) => {
-    //Recibe respuesta del tracker
-    console.log("Recibe respuesta de listar: \n");  //Llega a esta respuesta
-    mensaje = JSON.parse(msg); //Asumo que me llega el body con la lista de elementos y la ruta del mensaje es scan
+    console.log("Recibe respuesta de listar: \n");
+    console.log(any);
+    mensaje = JSON.parse(msg);
     console.log(mensaje);
     if (mensaje.route.includes("scan")) {
-      let listaDescargas = mensaje.body; //en el body esta la lista de archivos que fui haciendo append
+      let listaDescargas = mensaje.body;
       let response = crearArrayResponse(listaDescargas);
-
       //res.send(JSON.stringify(response)); //convierto la lista a string para poder enviarla
-
-      /*Me armo un json asi nomas para ver si lo recibe*/
-      let json = {
-        messageId: "",
-        route: "/scan",
-        originIP: iptracker,
-        originPort: portst,
-        body: "Json generico",
-      };
-
-      res.send(JSON.stringify(json));
-      return res.end();
+      //res.status(200).send(JSON.stringify(json));
     }
   });
+  /*Me armo un json asi nomas para ver si lo recibe*/
+  let json = {
+    messageId: "",
+    route: "/scan",
+    originIP: iptracker,
+    originPort: portst,
+    body: [
+      {
+        id: "1",
+      },
+      {
+        id: "2",
+      },
+    ],
+  };
+  res.status(200).send(JSON.stringify(json));
 });
 
 function loadFileStore(trackerFileStore, file) {

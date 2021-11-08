@@ -56,7 +56,6 @@ const initTracker = async function () {
     port: localport,
     excluse: true,
   });
-
 };
 
 initTracker();
@@ -72,6 +71,7 @@ trackerClient.on("message", (msg, info) => {
   );
   let mensaje = JSON.parse(msg);
   let mensajeRuta = mensaje.route.toString();
+
   //INTERFAZ STORE tracker-tracker
   if (mensajeRuta.includes("/store") && mensajeRuta.includes("/file")) {
     let mensajeJson = JSON.parse(mensaje.body);
@@ -90,8 +90,10 @@ trackerClient.on("message", (msg, info) => {
       });
     } else console.log(ht.list());
   }
+
   //INTERFAZ SCAN
-  if (mensajeRuta.includes("/scan")) {    //ESTA ES LA PARTE QUE NO ANDA
+  if (mensajeRuta.includes("/scan")) {
+    //ESTA ES LA PARTE QUE NO ANDA -------------------------
     //tengo messageId, route, originIp, originPort, body(files[])
 
     console.log("Entra al scan");
@@ -144,11 +146,11 @@ trackerClient.on("message", (msg, info) => {
 
 const appendElementos = (array) => {
   let arrayTabla = ht.list();
-  console.log(arrayTabla);
-  console.log(array);
+  // console.log(arrayTabla);
+  // console.log(array);
   arrayTabla.forEach((element) => {
     if (element != undefined) {
-      console.log("---------ELEMENT VALUE!!!!!!!!!!!!!!!!!!!! ========");
+      console.log(" ======== ELEMENT VALUE ========");
       console.log(element.value);
       array.push(element);
     }

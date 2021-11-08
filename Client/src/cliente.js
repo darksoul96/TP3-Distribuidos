@@ -34,9 +34,6 @@ const listaFile = () => {
   console.log("listaFile");
   const get = fetch(url + "/file", {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
   })
     .then((response) => response.json())
     .then((data) => {
@@ -53,8 +50,6 @@ const listaFile = () => {
     });
 };
 
-
-//NO SE SI ANDA ESTO PARA GENERAR HTML, HAY QUE PROBARLO
 const generateHTML_LIST = (arrayListar) => {
   window.alert("sometext");
   let htmlContent = "";
@@ -68,5 +63,5 @@ const generateHTML_LIST = (arrayListar) => {
     <p style="font-size=35 font-color=red"> HELLO </p>
     `;
   }
-  document.getElementById("lista_descargas").innerHTML += "HOLA";//htmlContent;
+  document.getElementById("lista_descargas").innerHTML += "HOLA"; //htmlContent;
 };

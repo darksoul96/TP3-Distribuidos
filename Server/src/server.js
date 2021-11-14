@@ -31,6 +31,10 @@ app.post("/file/", (req, res) => {
     route: `/file/${trackerFileStore.id}/store`,
     body: body,
   });
+  const client = dgram.createSocket("udp4");
+  client.bind(() => {
+    console.log(client.address());
+  });
   client.send(sendmsg, portst, iptracker, (err) => {
     if (err) {
       console.log(err);
@@ -46,56 +50,44 @@ app.get("/file", (req, res) => {
   console.log("Recibe solicitud de listar todos los archivos: \n"); //aca llega el request
 
   let files = [];
-
-  let sendmsg = JSON.stringify({
-    messageId: "",
-    route: "/scan",
-    originIP: iptracker,
-    originPort: portst,
-    body: files,
-  });
+  var sendmsg;
   const client = dgram.createSocket("udp4");
-  client.bind(() => {
-    console.log(client.address());
-  });
-  client.send(sendmsg, portst, iptracker, (err, response) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send("Error searching file: " + err.message);
-      res.end();
-      client.close();
-    }
-    response = JSON.parse(response);
-  });
-  let any = Math.random();
+
+  client.bind(() => {});
+
+  setTimeout(() => {
+    sendmsg = JSON.stringify({
+      messageId: "",
+      route: "/scan",
+      originIP: client.address().address,
+      originPort: client.address().port,
+      body: files,
+    });
+    console.log(sendmsg);
+  }, 100);
+
+  setTimeout(() => {
+    client.send(sendmsg, portst, iptracker, (err, response) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error searching file: " + err.message);
+        res.end();
+        client.close();
+      }
+      response = JSON.parse(response);
+    });
+  }, 200);
+
   client.on("message", (msg) => {
     console.log("Recibe respuesta de listar: \n");
-    console.log(any);
     mensaje = JSON.parse(msg);
     console.log(mensaje);
     if (mensaje.route.includes("scan")) {
       let listaDescargas = mensaje.body;
       let response = crearArrayResponse(listaDescargas);
-      //res.send(JSON.stringify(response)); //convierto la lista a string para poder enviarla
-      //res.status(200).send(JSON.stringify(json));
+      res.status(200).send(JSON.stringify(response));
     }
   });
-  /*Me armo un json asi nomas para ver si lo recibe*/
-  let json = {
-    messageId: "",
-    route: "/scan",
-    originIP: iptracker,
-    originPort: portst,
-    body: [
-      {
-        id: "1",
-      },
-      {
-        id: "2",
-      },
-    ],
-  };
-  res.status(200).send(JSON.stringify(json));
 });
 
 function loadFileStore(trackerFileStore, file) {

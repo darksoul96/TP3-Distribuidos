@@ -9,9 +9,10 @@ const cantidadTrackers = args[3];
 const sizeDHT = 127;
 
 var localaddress, localport, id;
-const datosServer = {
-  address: "127.0.0.1",
-  port: 8081,
+
+var datosServer = {
+  address: "",
+  port: 0,
 };
 
 var nodoDerecha = {
@@ -71,6 +72,10 @@ trackerClient.on("message", (msg, info) => {
   );
   let mensaje = JSON.parse(msg);
   let mensajeRuta = mensaje.route.toString();
+  datosServer = {
+    address: mensaje.originIP,
+    port: mensaje.originPort,
+  };
 
   //INTERFAZ STORE tracker-tracker
   if (mensajeRuta.includes("/store") && mensajeRuta.includes("/file")) {

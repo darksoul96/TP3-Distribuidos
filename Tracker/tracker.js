@@ -100,11 +100,13 @@ trackerClient.on("message", (msg, info) => {
   if (mensajeRuta.includes("/scan")) {
     //ESTA ES LA PARTE QUE NO ANDA -------------------------
     //tengo messageId, route, originIp, originPort, body(files[])
-
     console.log("Entra al scan");
     var arrayArchivos = [];
-    arrayArchivos = mensaje.body;
-    //console.log(arrayArchivos);
+    arrayArchivos = mensaje.body.files;
+    console.log(
+      "MUESTRO EL ARRAY ARCHIVOS QUE LE LLEGA AL TRACKER NUMERO " + id
+    );
+    console.log(arrayArchivos);
     appendElementos(arrayArchivos);
     files = arrayArchivos;
     let mensajeEnviar = {
@@ -112,7 +114,7 @@ trackerClient.on("message", (msg, info) => {
       route: mensaje.route,
       originIp: mensaje.originIp,
       originPort: mensaje.originPort,
-      body: files,
+      body: { files },
     };
 
     if (
@@ -151,13 +153,11 @@ trackerClient.on("message", (msg, info) => {
 
 const appendElementos = (array) => {
   let arrayTabla = ht.list();
-  // console.log(arrayTabla);
-  // // console.log(array);
-  arrayTabla.forEach((element) => {
-    if (element != undefined) {
-      console.log(" ======== ELEMENT VALUE ========");
-      console.log(element.value);
-      array.push(element);
+  if (arrayTabla) {
+    for (let i = 0; i < arrayTabla.length; i++) {
+      if (arrayTabla[i]) {
+        array.push(arrayTabla[i][1]);
+      }
     }
-  });
+  }
 };

@@ -61,7 +61,7 @@ app.get("/file", (req, res) => {
       route: "/scan",
       originIP: client.address().address,
       originPort: client.address().port,
-      body: files,
+      body: { files },
     });
     console.log(sendmsg);
   }, 100);

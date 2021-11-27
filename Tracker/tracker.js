@@ -152,7 +152,7 @@ trackerClient.on("message", (msg, info) => {
 const appendElementos = (array) => {
   let arrayTabla = ht.list();
   // console.log(arrayTabla);
-  // console.log(array);
+  // // console.log(array);
   arrayTabla.forEach((element) => {
     if (element != undefined) {
       console.log(" ======== ELEMENT VALUE ========");

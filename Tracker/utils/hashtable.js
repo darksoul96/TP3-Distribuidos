@@ -46,7 +46,8 @@ class HashTable {
   }
 
   list() {
-    return this.table;
+    if (this.size > 0) return this.table;
+    else return false;
   }
 
   getSize() {

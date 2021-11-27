@@ -114,12 +114,8 @@ trackerClient.on("message", (msg, info) => {
       body: { files },
     };
 
-    if (
-      (mensaje.originIp != localaddress &&
-        mensaje.originPort != localport &&
-        info.port != datosServer.port) ||
-      info.port == datosServer.port
-    ) {
+    if ((id == 1) && (info.address == nodoIzquierda.addressI)) {
+
       client.send(
         JSON.stringify(mensajeEnviar),
         nodoDerecha.portD,

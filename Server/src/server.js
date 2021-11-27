@@ -53,7 +53,7 @@ app.get("/file", (req, res) => {
   var sendmsg;
   const client = dgram.createSocket("udp4");
 
-  client.bind(() => {});
+  client.bind(() => { });
 
   setTimeout(() => {
     sendmsg = JSON.stringify({
@@ -61,7 +61,7 @@ app.get("/file", (req, res) => {
       route: "/scan",
       originIP: client.address().address,
       originPort: client.address().port,
-      body: files,
+      body: { files },
     });
     console.log(sendmsg);
   }, 100);

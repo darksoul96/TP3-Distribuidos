@@ -103,7 +103,7 @@ trackerClient.on("message", (msg, info) => {
 
     console.log("Entra al scan");
     var arrayArchivos = [];
-    arrayArchivos = mensaje.body;
+    arrayArchivos = mensaje.body.files;
     //console.log(arrayArchivos);
     appendElementos(arrayArchivos);
     files = arrayArchivos;

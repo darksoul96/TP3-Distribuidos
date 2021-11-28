@@ -4,7 +4,6 @@ var ht = require("./utils/hashtable.js");
 const trackerClient = dgram.createSocket("udp4");
 const process = require("process");
 const args = process.argv;
-const client = dgram.createSocket("udp4");
 const cantidadTrackers = args[3];
 const sizeDHT = 127;
 
@@ -87,20 +86,23 @@ trackerClient.on("message", (msg, info) => {
     };
     if (!ht.set(mensajeJson.id, arrayInfo)) {
       console.log("No entro");
-      client.send(msg, nodoDerecha.portD, nodoDerecha.addressD, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).send("Error loading file: " + err.message);
+      trackerClient.send(
+        msg,
+        nodoDerecha.portD,
+        nodoDerecha.addressD,
+        (err) => {
+          if (err) {
+            console.log(err);
+            res.status(500).send("Error loading file: " + err.message);
+          }
         }
-      });
+      );
     } else console.log(ht.list());
   }
 
   //INTERFAZ SCAN
   if (mensajeRuta.includes("/scan")) {
-    //ESTA ES LA PARTE QUE NO ANDA -------------------------
     //tengo messageId, route, originIp, originPort, body(files[])
-    console.log("Entra al scan");
     var arrayArchivos = [];
     arrayArchivos = mensaje.body.files;
     //console.log(arrayArchivos);
@@ -113,13 +115,25 @@ trackerClient.on("message", (msg, info) => {
       originPort: mensaje.originPort,
       body: { files },
     };
-
-    if ((id == 1) && (info.address == nodoIzquierda.addressI)) {
-
-      client.send(
+    console.log(
+      "info address:" +
+        info.address +
+        " NodoIzquierda Address:" +
+        nodoIzquierda.addressI
+    );
+    console.log(
+      "Info port: " + info.port + " NodoIzquierda Port: " + nodoIzquierda.portI
+    );
+    if (
+      id == 1 &&
+      info.address == nodoIzquierda.addressI &&
+      info.port == nodoIzquierda.portI
+    ) {
+      //si es el tracker que envio el mensaje, devuelvo la respuesta al server
+      trackerClient.send(
         JSON.stringify(mensajeEnviar),
-        nodoDerecha.portD,
-        nodoDerecha.addressD,
+        datosServer.port,
+        datosServer.address,
         (err) => {
           if (err) {
             console.log(err);
@@ -128,11 +142,11 @@ trackerClient.on("message", (msg, info) => {
         }
       );
     } else {
-      //si es el tracker que envio el mensaje, devuelvo la respuesta al server
-      client.send(
+      // le envio al nodo derecho
+      trackerClient.send(
         JSON.stringify(mensajeEnviar),
-        datosServer.port,
-        datosServer.address,
+        nodoDerecha.portD,
+        nodoDerecha.addressD,
         (err) => {
           if (err) {
             console.log(err);
@@ -147,10 +161,18 @@ trackerClient.on("message", (msg, info) => {
 const appendElementos = (array) => {
   let arrayTabla = ht.list();
   if (arrayTabla) {
+    console.log("array:" + array);
     for (let i = 0; i < arrayTabla.length; i++) {
-      if (arrayTabla[i]) {
+      if (arrayTabla[i] && noPert(array, arrayTabla[i][1])) {
         array.push(arrayTabla[i][1]);
       }
     }
   }
+};
+
+noPert = (array, elemento) => {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i].filename == elemento.filename) return false;
+  }
+  return true;
 };

@@ -53,7 +53,7 @@ app.get("/file", (req, res) => {
   var sendmsg;
   const client = dgram.createSocket("udp4");
 
-  client.bind(() => { });
+  client.bind(() => {});
 
   setTimeout(() => {
     sendmsg = JSON.stringify({
@@ -82,6 +82,7 @@ app.get("/file", (req, res) => {
     console.log("Recibe respuesta de listar: \n");
     mensaje = JSON.parse(msg);
     console.log(mensaje);
+    console.log(mensaje.body.files);
     if (mensaje.route.includes("scan")) {
       let listaDescargas = mensaje.body;
       let response = crearArrayResponse(listaDescargas);

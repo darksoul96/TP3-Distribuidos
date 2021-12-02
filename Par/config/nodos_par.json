@@ -1,0 +1,69 @@
+{
+    "nodos": [
+        {
+            "id": 1,
+            "address": "127.0.0.1",
+            "port": "8499",
+            "nodoDerecha": {
+                "addressD": "127.0.0.1",
+                "portD": "8500"
+            },
+            "nodoIzquierda": {
+                "addressI": "127.0.0.1",
+                "portI": "8503"
+            }
+        },
+        {
+            "id": 2,
+            "address": "127.0.0.1",
+            "port": "8500",
+            "nodoDerecha": {
+                "addressD": "127.0.0.1",
+                "portD": "8501"
+            },
+            "nodoIzquierda": {
+                "addressI": "127.0.0.1",
+                "portI": "8499"
+            }
+        },
+        {
+            "id": 3,
+            "address": "127.0.0.1",
+            "port": "8501",
+            "nodoDerecha": {
+                "addressD": "127.0.0.1",
+                "portD": "8502"
+            },
+            "nodoIzquierda": {
+                "addressI": "127.0.0.1",
+                "portI": "8500"
+            }
+        },
+        {
+            "id": 4,
+            "address": "127.0.0.1",
+            "port": "8502",
+            "nodoDerecha": {
+                "addressD": "127.0.0.1",
+                "portD": "8503"
+            },
+            "nodoIzquierda": {
+                "addressI": "127.0.0.1",
+                "portI": "8501"
+            }
+        },
+        {
+            "id": 5,
+            "address": "127.0.0.1",
+            "port": "8503",
+            "nodoDerecha": {
+                "addressD": "127.0.0.1",
+                "portD": "8499"
+            },
+            "nodoIzquierda": {
+                "addressI": "127.0.0.1",
+                "portI": "8502"
+            }
+        }
+    ]
+}

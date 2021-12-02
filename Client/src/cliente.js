@@ -53,14 +53,24 @@ const listaFile = () => {
 const generateHTML_LIST = (arrayListar) => {
 
   let htmlContent = "";
+
   for (let i = 0; i < arrayListar.length; i++) {
     let file = arrayListar[i];
     console.log(file);
-    htmlContent += `
-    <tr>
-    <td>${file.filename}</td><br>
-    </tr>
-    `;
+    //creo un array de tags 'a'
+    let a = document.createElement('a');
+    //creo un link con el nombre del archivo
+    let link = document.createTextNode(file.filename);
+    //agrego el link al tag 'a'
+    a.appendChild(link);
+    //le pongo nombre
+    a.title = file.filename;
+    a.href = "http://www.google.com";
+    document.getElementById("lista_descargas").appendChild(a);
+    document.getElementById("lista_descargas").innerHTML += "<br>";
+    document.getElementById("lista_descargas").innerHTML += "<br>";
+    //htmlContent += a;
   }
-  document.getElementById("lista_descargas").innerHTML += htmlContent; //htmlContent;
+
+  //document.getElementById("lista_descargas").innerHTML += htmlContent; //;
 };

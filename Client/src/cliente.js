@@ -57,21 +57,23 @@ const generateHTML_LIST = (arrayListar) => {
     let file = arrayListar[i];
     console.log(file);
     //creo un array de tags 'a'
-    let a = document.createElement('a');
+    //let a = document.createElement('label');
     //creo un link con el nombre del archivo
-    let link = document.createTextNode(file.filename);
+    //let link = document.createTextNode(file.filename);
     //agrego el link al tag 'a'
-    a.appendChild(link);
+    //a.appendChild(link);
     //le pongo nombre
-    a.title = file.filename;
-    a.href = "http://www.google.com";
-    document.getElementById("lista_descargas").appendChild(a);
+    //a.title = file.filename;
+    //a.href = "http://www.google.com";
+    //document.getElementById("lista_descargas").appendChild(a);
     document.getElementById("lista_descargas").innerHTML += `
-    <form action="/" method="post">
-    <button>Descargar</button>
+    <form action="/" method="get">
+    <label>${file.filename}</label>
+    <input type="submit" value="Descargar">
     </form>`;
     document.getElementById("lista_descargas").innerHTML += "<br>";
   }
 
-  //document.getElementById("lista_descargas").innerHTML += htmlContent; //;
+
+  document.getElementById("boton_listar").style.visibility = "hidden"; //;
 };

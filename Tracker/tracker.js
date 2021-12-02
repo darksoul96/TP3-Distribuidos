@@ -117,9 +117,9 @@ trackerClient.on("message", (msg, info) => {
     };
     console.log(
       "info address:" +
-        info.address +
-        " NodoIzquierda Address:" +
-        nodoIzquierda.addressI
+      info.address +
+      " NodoIzquierda Address:" +
+      nodoIzquierda.addressI
     );
     console.log(
       "Info port: " + info.port + " NodoIzquierda Port: " + nodoIzquierda.portI

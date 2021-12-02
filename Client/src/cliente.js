@@ -52,28 +52,40 @@ const listaFile = () => {
 
 const generateHTML_LIST = (arrayListar) => {
 
-  let htmlContent = '';
+  //let htmlContent = '';
   for (let i = 0; i < arrayListar.length; i++) {
     let file = arrayListar[i];
     console.log(file);
-    //creo un array de tags 'a'
-    //let a = document.createElement('label');
-    //creo un link con el nombre del archivo
-    //let link = document.createTextNode(file.filename);
-    //agrego el link al tag 'a'
-    //a.appendChild(link);
-    //le pongo nombre
-    //a.title = file.filename;
-    //a.href = "http://www.google.com";
-    //document.getElementById("lista_descargas").appendChild(a);
+
     document.getElementById("lista_descargas").innerHTML += `
-    <form action="/" method="get">
-    <label>${file.filename}</label>
-    <input type="submit" value="Descargar">
+    <form method="get" onsubmit="descargaArchivo(${i})";return false>
+    <label id="label${i}">${file.filename}</label>
+    <input type="submit" value="Descargar" id="button${i}">
     </form>`;
     document.getElementById("lista_descargas").innerHTML += "<br>";
   }
-
-
-  document.getElementById("boton_listar").style.visibility = "hidden"; //;
+  //document.getElementById("boton_listar").style.visibility = "hidden"; //;
 };
+
+
+
+const descargaArchivo = (i) => {
+  console.log("descargaArchivo");
+
+  labelValue = document.getElementById("label" + i).textContent;
+  console.log(labelValue);
+  // const get = fetch(url + "/file/", {
+  //   method: "GET",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify(file),
+  // })
+  //   .then((response) => response.text())
+  //   .then((data) => {
+  //     console.log("Success:", data);
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error:", error);
+  //   });
+}

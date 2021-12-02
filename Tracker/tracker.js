@@ -80,8 +80,9 @@ trackerClient.on("message", (msg, info) => {
   if (mensajeRuta.includes("/store") && mensajeRuta.includes("/file")) {
     let mensajeJson = JSON.parse(mensaje.body);
     let arrayInfo = {
+      id: mensajeJson.id,
       filename: mensajeJson.filename,
-      size: mensajeJson.filesize,
+      filesize: mensajeJson.filesize,
       par: { ip: mensajeJson.parIP, port: mensajeJson.parPort },
     };
     if (!ht.set(mensajeJson.id, arrayInfo)) {
@@ -105,7 +106,7 @@ trackerClient.on("message", (msg, info) => {
     //tengo messageId, route, originIp, originPort, body(files[])
     var arrayArchivos = [];
     arrayArchivos = mensaje.body.files;
-    //console.log(arrayArchivos);
+    console.log(arrayArchivos);
     appendElementos(arrayArchivos);
     files = arrayArchivos;
     let mensajeEnviar = {

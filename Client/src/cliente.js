@@ -52,8 +52,7 @@ const listaFile = () => {
 
 const generateHTML_LIST = (arrayListar) => {
 
-  let htmlContent = "";
-
+  let htmlContent = '';
   for (let i = 0; i < arrayListar.length; i++) {
     let file = arrayListar[i];
     console.log(file);
@@ -67,9 +66,11 @@ const generateHTML_LIST = (arrayListar) => {
     a.title = file.filename;
     a.href = "http://www.google.com";
     document.getElementById("lista_descargas").appendChild(a);
+    document.getElementById("lista_descargas").innerHTML += `
+    <form action="/" method="post">
+    <button>Descargar</button>
+    </form>`;
     document.getElementById("lista_descargas").innerHTML += "<br>";
-    document.getElementById("lista_descargas").innerHTML += "<br>";
-    //htmlContent += a;
   }
 
   //document.getElementById("lista_descargas").innerHTML += htmlContent; //;

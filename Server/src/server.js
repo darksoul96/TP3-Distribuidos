@@ -53,7 +53,7 @@ app.get("/file", (req, res) => {
   var sendmsg;
   const client = dgram.createSocket("udp4");
 
-  client.bind(() => {});
+  client.bind(() => { });
 
   setTimeout(() => {
     sendmsg = JSON.stringify({
@@ -78,14 +78,18 @@ app.get("/file", (req, res) => {
     });
   }, 200);
 
+  //Mensajes desde el tracker al server
   client.on("message", (msg) => {
     console.log("Recibe respuesta de listar: \n");
     mensaje = JSON.parse(msg);
     console.log(mensaje);
     console.log(mensaje.body.files);
+    //Si el mensaje es la respuesta del scan, tengo que devolverle la lista al cliente
     if (mensaje.route.includes("scan")) {
-      let listaDescargas = mensaje.body;
-      let response = crearArrayResponse(listaDescargas);
+
+      let response = crearArrayResponse(mensaje.body.files);
+      console.log("Lista de respuesta");
+      console.log(response);
       res.status(200).send(JSON.stringify(response));
     }
   });

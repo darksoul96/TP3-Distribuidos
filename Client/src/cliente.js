@@ -40,8 +40,8 @@ const listaFile = () => {
       //data es un array de objetos para poder listarlos
       console.log("Success:", data);
       //if (data != null && data.length > 0) {
-      //arrayListar = JSON.parse(data);
-      let arrayListar = [];
+      let arrayListar = data;
+
       generateHTML_LIST(arrayListar);
       //}
     })
@@ -51,17 +51,16 @@ const listaFile = () => {
 };
 
 const generateHTML_LIST = (arrayListar) => {
-  window.alert("sometext");
+
   let htmlContent = "";
   for (let i = 0; i < arrayListar.length; i++) {
     let file = arrayListar[i];
+    console.log(file);
     htmlContent += `
     <tr>
-    <td>${file.filename}</td>
+    <td>${file.filename}</td><br>
     </tr>
-    HELLO
-    <p style="font-size=35 font-color=red"> HELLO </p>
     `;
   }
-  document.getElementById("lista_descargas").innerHTML += "HOLA"; //htmlContent;
+  document.getElementById("lista_descargas").innerHTML += htmlContent; //htmlContent;
 };

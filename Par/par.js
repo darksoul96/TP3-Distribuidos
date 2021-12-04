@@ -2,6 +2,30 @@ const fs = require("fs");
 const dgram = require("dgram");
 const parClient = dgram.createSocket("udp4");
 const args = process.argv;
+const readline = require("readline");
+process.stdin.setEncoding("utf8");
+
+var rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  terminal: false,
+});
+
+// Interfaz para solicitar el input del archivo torrente
+rl.on("line", (input) => {
+  if (input.toLowerCase() === "exit") {
+    process.exit();
+  } else {
+    console.log("Descargando archivo..." + input);
+    ejemplo(input);
+  }
+});
+
+function ejemplo(input) {
+  console.log("YA SE DESCARGO EL ARCHIVO PAPA");
+  console.log("================================================");
+  console.log("Inserte el nombre del archivo torrente");
+}
 
 var localaddress, localport, id;
 
@@ -23,6 +47,7 @@ const initPar = async function () {
     fs.readFileSync("./config/nodos_par.json", "utf8")
   )["nodos"];
   let index = nodos.findIndex((nodo) => nodo.id == id);
+  console.log("================================================");
   console.log("ADDRESS: " + nodos[index].address);
   localaddress = nodos[index].address;
   localport = nodos[index].port;
@@ -35,40 +60,8 @@ const initPar = async function () {
     port: localport,
     excluse: true,
   });
+  console.log("================================================");
+  console.log("Inserte el nombre del archivo torrente");
 };
-
-// reads input from command line
-const readInput = function () {
-  process.stdin.setEncoding("utf8");
-  process.stdin.on("readable", function () {
-    var input = process.stdin.read();
-    if (input !== null) {
-      var instruction = input.toString().trim();
-      switch (instruction) {
-        case "download":
-          console.log("Inserte el nombre del archivo");
-          process.stdin.setEncoding("utf8");
-          process.stdin.on("readable", function () {
-            var input = process.stdin.read();
-            if (input !== null) {
-              var name = input.toString().trim();
-              process.stdout.write("Downloading torrente: " + name + "\n");
-              ejemeplo(name);
-            }
-          });
-          break;
-        default:
-          process.stdout.write("Unknown command!\n");
-          break;
-      }
-    }
-  });
-};
-
-function ejemplo(nombre) {
-  console.log("Bajando " + nombre);
-  readInput();
-}
 
 initPar();
-readInput();

@@ -53,7 +53,7 @@ app.get("/file", (req, res) => {
   var sendmsg;
   const client = dgram.createSocket("udp4");
 
-  client.bind(() => { });
+  client.bind(() => {});
 
   setTimeout(() => {
     sendmsg = JSON.stringify({
@@ -86,7 +86,6 @@ app.get("/file", (req, res) => {
     console.log(mensaje.body.files);
     //Si el mensaje es la respuesta del scan, tengo que devolverle la lista al cliente
     if (mensaje.route.includes("scan")) {
-
       let response = crearArrayResponse(mensaje.body.files);
       console.log("Lista de respuesta");
       console.log(response);
@@ -95,19 +94,16 @@ app.get("/file", (req, res) => {
   });
 });
 
-
 //INTERFAZ DE DESCARGA DE ARCHIVO
 app.get("/file/:id", (req, res) => {
-
+  console.log("Recibe solicitud de descarga de archivo: \n");
   let response = {
     id: req.params.id,
-    filename: "Archivo generico",
-    filesize: 500
-  }
-
-
+    filename: "Archivo generico!!!!!!!!!!!!!!!!",
+    filesize: 500,
+  };
+  res.status(200).send(response);
 });
-
 
 function loadFileStore(trackerFileStore, file) {
   trackerFileStore.filename = file.filename;

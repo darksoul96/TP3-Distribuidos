@@ -2,7 +2,6 @@ const url = "http://localhost:8080";
 
 var files = [];
 
-
 const cargaFile = () => {
   fname = document.getElementById("fname").value;
   fsize = document.getElementById("fsize").value;
@@ -54,7 +53,6 @@ const listaFile = () => {
 };
 
 const generateHTML_LIST = (arrayListar) => {
-
   for (let i = 0; i < arrayListar.length; i++) {
     let file = arrayListar[i];
     console.log(file);
@@ -72,18 +70,38 @@ const generateHTML_LIST = (arrayListar) => {
   document.getElementById("boton_listar").style.visibility = "hidden";
 };
 
-
 //Cuando presiono algún botón de descarga, va a llamar a este método
 const descargaArchivo = (i) => {
-
-  //Contenido del archivo: 
-  //{
-  //    hash: str,
-  //    trackerIP: str,
-  //    trackerPort: int
-  //}
-
   hashArchivo = files[i];
   console.log(hashArchivo);
-  //borre todo, hay que hacerlo de cero pero bien
+  const get = fetch(url + "/file/" + hashArchivo.id, {
+    method: "GET",
+    headers: {
+      "Content-Disposition": "attachment",
+      "Content-Type": "text/plain",
+      filename: hashArchivo.filename + ".torrente",
+    },
+  })
+    .then((response) => response.text())
+    .then((data) => {
+      console.log("Success:", data);
+      let filename = hashArchivo.filename + ".torrente";
+      download(data, filename);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+};
+
+function download(info, name) {
+  var element = document.createElement("a");
+  element.setAttribute(
+    "href",
+    "data:text/plain;charset=utf-8," + encodeURIComponent(info)
+  );
+  element.setAttribute("download", name);
+  element.style.display = "none";
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
 }

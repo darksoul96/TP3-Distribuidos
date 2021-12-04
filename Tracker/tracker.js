@@ -118,9 +118,9 @@ trackerClient.on("message", (msg, info) => {
     };
     console.log(
       "info address:" +
-        info.address +
-        " NodoIzquierda Address:" +
-        nodoIzquierda.addressI
+      info.address +
+      " NodoIzquierda Address:" +
+      nodoIzquierda.addressI
     );
     console.log(
       "Info port: " + info.port + " NodoIzquierda Port: " + nodoIzquierda.portI
@@ -158,68 +158,68 @@ trackerClient.on("message", (msg, info) => {
     }
   }
 
-  // INTERFAZ SEARCH
-  if (mensajeRuta.includes("/file/")) {
-    // CHEQUEAR SI ESTA BIEN EXTRAIDO EL HASH DE LA RUTA.
-    let hash = mensajeRuta.split("/")[2];
-    // Si el archivo se encuentra en este tracker
-    if (ht.get(hash)) {
-      let mensajeEnviar = {
-        messageId: mensaje.messageId,
-        route: mensaje.route + "/found",
-        originIp: mensaje.originIp,
-        originPort: mensaje.originPort,
-        body: {
-          id: ht.get(hash).id,
-          filename: ht.get(hash).filename,
-          filesize: ht.get(hash).filesize,
-          trackerIP: localaddress,
-          trackerPort: localport,
-          pares: [
-            { parIP: ht.get(hash).par.ip, parPort: ht.get(hash).par.port },
-          ],
-        },
-      };
-      trackerClient.send(
-        JSON.stringify(mensajeEnviar),
-        datosServer.port,
-        datosServer.address,
-        (err) => {
-          if (err) {
-            console.log(err);
-            res.status(500).send("Error loading file: " + err.message);
-          }
-        }
-      );
-    }
-  } else {
-    if (
-      id == 1 &&
-      info.address == nodoIzquierda.addressI &&
-      info.port == nodoIzquierda.portI
-    ) {
-      let mensajeEnviar = {
-        messageId: mensaje.messageId,
-        route: mensaje.route + "/found",
-        originIp: mensaje.originIp,
-        originPort: mensaje.originPort,
-        body: {},
-      };
-    } else {
-      // Si el archivo no se encuentra en este tracker, se lo envio al nodo derecho
-      trackerClient.send(
-        JSON.stringify(mensaje),
-        nodoDerecha.portD,
-        nodoDerecha.addressD,
-        (err) => {
-          if (err) {
-            console.log(err);
-            res.status(500).send("Error loading file: " + err.message);
-          }
-        }
-      );
-    }
-  }
+  // // INTERFAZ SEARCH
+  // if (mensajeRuta.includes("/file/")) {
+  //   // CHEQUEAR SI ESTA BIEN EXTRAIDO EL HASH DE LA RUTA.
+  //   let hash = mensajeRuta.split("/")[2];
+  //   // Si el archivo se encuentra en este tracker
+  //   if (ht.get(hash)) {
+  //     let mensajeEnviar = {
+  //       messageId: mensaje.messageId,
+  //       route: mensaje.route + "/found",
+  //       originIp: mensaje.originIp,
+  //       originPort: mensaje.originPort,
+  //       body: {
+  //         id: ht.get(hash).id,
+  //         filename: ht.get(hash).filename,
+  //         filesize: ht.get(hash).filesize,
+  //         trackerIP: localaddress,
+  //         trackerPort: localport,
+  //         pares: [
+  //           // { parIP: ht.get(hash).par.ip, parPort: ht.get(hash).par.port },
+  //         ],
+  //       },
+  //     };
+  //     trackerClient.send(
+  //       JSON.stringify(mensajeEnviar),
+  //       datosServer.port,
+  //       datosServer.address,
+  //       (err) => {
+  //         if (err) {
+  //           console.log(err);
+  //           res.status(500).send("Error loading file: " + err.message);
+  //         }
+  //       }
+  //     );
+  //   }
+  // } else {
+  //   if (
+  //     id == 1 &&
+  //     info.address == nodoIzquierda.addressI &&
+  //     info.port == nodoIzquierda.portI
+  //   ) {
+  //     let mensajeEnviar = {
+  //       messageId: mensaje.messageId,
+  //       route: mensaje.route + "/found",
+  //       originIp: mensaje.originIp,
+  //       originPort: mensaje.originPort,
+  //       body: {},
+  //     };
+  //   } else {
+  //     // Si el archivo no se encuentra en este tracker, se lo envio al nodo derecho
+  //     trackerClient.send(
+  //       JSON.stringify(mensaje),
+  //       nodoDerecha.portD,
+  //       nodoDerecha.addressD,
+  //       (err) => {
+  //         if (err) {
+  //           console.log(err);
+  //           res.status(500).send("Error loading file: " + err.message);
+  //         }
+  //       }
+  //     );
+  //   }
+  // }
 });
 
 const appendElementos = (array) => {

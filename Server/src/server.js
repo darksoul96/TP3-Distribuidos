@@ -95,6 +95,20 @@ app.get("/file", (req, res) => {
   });
 });
 
+
+//INTERFAZ DE DESCARGA DE ARCHIVO
+app.get("/file/:id", (req, res) => {
+
+  let response = {
+    id: req.params.id,
+    filename: "Archivo generico",
+    filesize: 500
+  }
+
+
+});
+
+
 function loadFileStore(trackerFileStore, file) {
   trackerFileStore.filename = file.filename;
   trackerFileStore.filesize = file.filesize;

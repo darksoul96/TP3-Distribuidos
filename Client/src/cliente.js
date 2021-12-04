@@ -83,28 +83,7 @@ const descargaArchivo = (i) => {
   //    trackerPort: int
   //}
 
-
   hashArchivo = files[i];
   console.log(hashArchivo);
-  const get = fetch(url + "/file/" + hashArchivo.id, {
-    method: "GET",
-    headers: {
-      "Content-Disposition": "attachment",
-      "Content-Type": "text/plain",
-      "filename": hashArchivo.filename + ".torrente"
-    },
-    //
-    body: {   //ESTO HAY QUE MODIFICAR PORQUE AHORA PIDE EL TRACKER EN VEZ DEL PAR!!!!!!!
-      hash: hashArchivo.id,
-      trackerIP: hashArchivo.nodeIP,
-      trackerPort: hashArchivo.nodePort
-    }
-  })
-    .then((response) => response.text())
-    .then((data) => {
-      console.log("Success:", data);
-    })
-    .catch((error) => {     //Aviso que va a entrar siempre a este catch porque no esta bien la solicitud
-      console.error("Error:", error);
-    });
+  //borre todo, hay que hacerlo de cero pero bien
 }

@@ -86,7 +86,7 @@ const descargaArchivo = (i) => {
     .then((data) => {
       console.log("Success:", data);
       let filename = hashArchivo.filename + ".torrente";
-      download(data, filename);
+      download(data, filename);   //metodo para descargar (data contiene la info del .torrente)
     })
     .catch((error) => {
       console.error("Error:", error);

@@ -53,7 +53,7 @@ app.get("/file", (req, res) => {
   var sendmsg;
   const client = dgram.createSocket("udp4");
 
-  client.bind(() => {});
+  client.bind(() => { });
 
   setTimeout(() => {
     sendmsg = JSON.stringify({
@@ -78,7 +78,7 @@ app.get("/file", (req, res) => {
     });
   }, 200);
 
-  //Mensajes desde el tracker al server
+  //Mensajes desde el tracker al server de la lista de archivos
   client.on("message", (msg) => {
     console.log("Recibe respuesta de listar: \n");
     mensaje = JSON.parse(msg);
@@ -97,17 +97,19 @@ app.get("/file", (req, res) => {
 //INTERFAZ DE DESCARGA DE ARCHIVO
 app.get("/file/:id", (req, res) => {
   console.log("Recibe solicitud de descarga de archivo: \n");
+
   const client = dgram.createSocket("udp4");
-  client.bind(() => {});
+  client.bind(() => { });
+
   setTimeout(() => {
-    sendmsg = JSON.stringify({
+    sendmsg = JSON.stringify({    //
       messageId: "",
-      route: "/scan",
+      route: "/file/" + req.params.id,
       originIP: client.address().address,
       originPort: client.address().port,
       body: {},
     });
-    console.log(sendmsg);
+    //console.log(sendmsg);
   }, 100);
   setTimeout(() => {
     client.send(sendmsg, portst, iptracker, (err, response) => {
@@ -118,15 +120,29 @@ app.get("/file/:id", (req, res) => {
         client.close();
       }
       response = JSON.parse(response);
+
     });
   }, 200);
 
-  let response = {
-    id: req.params.id,
-    filename: "Archivo generico!!!!!!!!!!!!!!!!",
-    filesize: 500,
-  };
-  res.status(200).send(response);
+
+  client.on("message", (msg) => {
+    console.log("Recibe respuesta de descargar una vez encontrado el archivo: \n");
+    mensaje = JSON.parse(msg);
+
+    //Si el mensaje es la respuesta del scan, tengo que devolverle la lista al cliente
+    if (mensaje.route.includes("found")) {
+
+      let response = {
+        id: mensaje.body.id,
+        trackerIP: mensaje.body.trackerIP,
+        trackerPort: mensaje.body.trackerPort,
+      };
+
+      console.log("Archivo encontrado para descargar");
+      console.log(response);
+      res.status(200).send(response);
+    }
+  });
 });
 
 function loadFileStore(trackerFileStore, file) {

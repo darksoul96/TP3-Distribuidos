@@ -118,9 +118,9 @@ trackerClient.on("message", (msg, info) => {
     };
     console.log(
       "info address:" +
-        info.address +
-        " NodoIzquierda Address:" +
-        nodoIzquierda.addressI
+      info.address +
+      " NodoIzquierda Address:" +
+      nodoIzquierda.addressI
     );
     console.log(
       "Info port: " + info.port + " NodoIzquierda Port: " + nodoIzquierda.portI
@@ -166,6 +166,7 @@ trackerClient.on("message", (msg, info) => {
   ) {
     // CHEQUEAR SI ESTA BIEN EXTRAIDO EL HASH DE LA RUTA.
     let hash = mensajeRuta.split("/")[2];
+    console.log("HASH: " + hash);
     // Si el archivo se encuentra en este tracker
     let pares = [];
     if (ht.get(hash)) {
@@ -195,18 +196,19 @@ trackerClient.on("message", (msg, info) => {
         }
       );
     } else {
-      if (
+      if ( //Si el archivo no se encuentra en ningun tracker, envio error 404
         id == 1 &&
         info.address == nodoIzquierda.addressI &&
         info.port == nodoIzquierda.portI
       ) {
-        let mensajeEnviar = {
-          messageId: mensaje.messageId,
-          route: mensaje.route + "/found",
-          originIp: mensaje.originIp,
-          originPort: mensaje.originPort,
-          body: {},
-        };
+        // let mensajeEnviar = {
+        //   messageId: mensaje.messageId,
+        //   route: mensaje.route + "/found",
+        //   originIp: mensaje.originIp,
+        //   originPort: mensaje.originPort,
+        //   body: {},
+        // };
+        res.status(404).send("File not found: " + err.message);
       } else {
         // Si el archivo no se encuentra en este tracker, se lo envio al nodo derecho
         trackerClient.send(

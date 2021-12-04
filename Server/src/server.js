@@ -53,7 +53,7 @@ app.get("/file", (req, res) => {
   var sendmsg;
   const client = dgram.createSocket("udp4");
 
-  client.bind(() => { });
+  client.bind(() => {});
 
   setTimeout(() => {
     sendmsg = JSON.stringify({
@@ -99,10 +99,11 @@ app.get("/file/:id", (req, res) => {
   console.log("Recibe solicitud de descarga de archivo: \n");
 
   const client = dgram.createSocket("udp4");
-  client.bind(() => { });
+  client.bind(() => {});
 
   setTimeout(() => {
-    sendmsg = JSON.stringify({    //
+    sendmsg = JSON.stringify({
+      //
       messageId: "",
       route: "/file/" + req.params.id,
       originIP: client.address().address,
@@ -120,18 +121,17 @@ app.get("/file/:id", (req, res) => {
         client.close();
       }
       response = JSON.parse(response);
-
     });
   }, 200);
 
-
   client.on("message", (msg) => {
-    console.log("Recibe respuesta de descargar una vez encontrado el archivo: \n");
+    console.log(
+      "Recibe respuesta de descargar una vez encontrado el archivo: \n"
+    );
     mensaje = JSON.parse(msg);
-
+    console.log("MENSAJE DEL TRACKER AL SERVER: " + mensaje.body);
     //Si el mensaje es la respuesta del scan, tengo que devolverle la lista al cliente
     if (mensaje.route.includes("found")) {
-
       let response = {
         id: mensaje.body.id,
         trackerIP: mensaje.body.trackerIP,

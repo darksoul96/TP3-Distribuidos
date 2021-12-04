@@ -118,9 +118,9 @@ trackerClient.on("message", (msg, info) => {
     };
     console.log(
       "info address:" +
-      info.address +
-      " NodoIzquierda Address:" +
-      nodoIzquierda.addressI
+        info.address +
+        " NodoIzquierda Address:" +
+        nodoIzquierda.addressI
     );
     console.log(
       "Info port: " + info.port + " NodoIzquierda Port: " + nodoIzquierda.portI
@@ -164,9 +164,7 @@ trackerClient.on("message", (msg, info) => {
     !mensajeRuta.includes("/store") &&
     !mensajeRuta.includes("/scan")
   ) {
-    // CHEQUEAR SI ESTA BIEN EXTRAIDO EL HASH DE LA RUTA.
     let hash = mensajeRuta.split("/")[2];
-    console.log("HASH: " + hash);
     // Si el archivo se encuentra en este tracker
     let pares = [];
     if (ht.get(hash)) {
@@ -176,7 +174,7 @@ trackerClient.on("message", (msg, info) => {
         originIp: mensaje.originIp,
         originPort: mensaje.originPort,
         body: {
-          id: ht.get(hash).id,
+          id: ht.get(hash)[0],
           filename: ht.get(hash).filename,
           filesize: ht.get(hash).filesize,
           trackerIP: localaddress,
@@ -184,6 +182,7 @@ trackerClient.on("message", (msg, info) => {
           pares: { pares },
         },
       };
+      console.log("MENSAJE ENVIAR . BODY . ID : " + mensajeEnviar.body.id);
       trackerClient.send(
         JSON.stringify(mensajeEnviar),
         datosServer.port,
@@ -196,7 +195,8 @@ trackerClient.on("message", (msg, info) => {
         }
       );
     } else {
-      if ( //Si el archivo no se encuentra en ningun tracker, envio error 404
+      if (
+        //Si el archivo no se encuentra en ningun tracker, envio error 404
         id == 1 &&
         info.address == nodoIzquierda.addressI &&
         info.port == nodoIzquierda.portI

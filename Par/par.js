@@ -37,5 +37,38 @@ const initPar = async function () {
     });
 };
 
-initPar();
+// reads input from command line
+const readInput = function () {
+    process.stdin.setEncoding("utf8");
+    process.stdin.on("readable", function () {
+        var input = process.stdin.read();
+        if (input !== null) {
+            var instruction = input.toString().trim();
+            switch (instruction) {
+                case "download":
+                    console.log("Inserte el nombre del archivo");
+                    process.stdin.setEncoding("utf8");
+                    process.stdin.on("readable", function () {
+                        var input = process.stdin.read();
+                        if (input !== null) {
+                            var name = input.toString().trim();
+                            process.stdout.write("Downloading torrente: " + name + "\n");
+                            ejemeplo(name);
+                        }
+                    });
+                    break;
+                default:
+                    process.stdout.write("Unknown command!\n");
+                    break;
+            }
+        }
+    });
+};
 
+function ejemplo(nombre) {
+    console.log("Bajando " + nombre);
+    readInput();
+}
+
+initPar();
+readInput();

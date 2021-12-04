@@ -97,6 +97,30 @@ app.get("/file", (req, res) => {
 //INTERFAZ DE DESCARGA DE ARCHIVO
 app.get("/file/:id", (req, res) => {
   console.log("Recibe solicitud de descarga de archivo: \n");
+  const client = dgram.createSocket("udp4");
+  client.bind(() => {});
+  setTimeout(() => {
+    sendmsg = JSON.stringify({
+      messageId: "",
+      route: "/scan",
+      originIP: client.address().address,
+      originPort: client.address().port,
+      body: {},
+    });
+    console.log(sendmsg);
+  }, 100);
+  setTimeout(() => {
+    client.send(sendmsg, portst, iptracker, (err, response) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error searching file: " + err.message);
+        res.end();
+        client.close();
+      }
+      response = JSON.parse(response);
+    });
+  }, 200);
+
   let response = {
     id: req.params.id,
     filename: "Archivo generico!!!!!!!!!!!!!!!!",

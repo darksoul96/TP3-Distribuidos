@@ -33,9 +33,11 @@ var rl = readline.createInterface({
 const server = net.createServer((socket) => {
   socket.on("data", (data) => {
     console.log("Recibe pedido de descarga: " + data.toString());
-    let file = fs.readFileSync(data.toString(), "utf8");
-    console.log(file);
-    socket.write(file);
+    // let file = fs.readFileSync(data.toString(), "utf8");
+    // console.log(file);
+    // socket.write(file);
+    let file = fs.createReadStream(data.toString());
+    file.pipe(socket);
   });
   socket.on("end", () => {
     console.log("client disconnected");
@@ -114,7 +116,8 @@ function solicitudDescarga(ip, port) {
   });
   clientS.on("data", (data) => {
     console.log("Recibiendo archivo...");
-    fs.writeFile(archivo, data.toString(), (err) => {
+    //fs.createReadStream(archivo).pipe(fs.createWriteStream(archivo));
+    fs.writeFile(archivo, data, (err) => {
       if (err) throw err;
       console.log("Archivo guardado");
     });

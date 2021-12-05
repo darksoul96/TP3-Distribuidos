@@ -132,15 +132,19 @@ app.get("/file/:id", (req, res) => {
     console.log("MENSAJE DEL TRACKER AL SERVER: " + mensaje.body);
     //Si el mensaje es la respuesta del scan, tengo que devolverle la lista al cliente
     if (mensaje.route.includes("found")) {
-      let response = {
-        id: mensaje.body.id,
-        trackerIP: mensaje.body.trackerIP,
-        trackerPort: mensaje.body.trackerPort,
-      };
+      if (mensaje.body) {
+        let response = {
+          id: mensaje.body.id,
+          trackerIP: mensaje.body.trackerIP,
+          trackerPort: mensaje.body.trackerPort,
+        };
 
-      console.log("Archivo encontrado para descargar");
-      console.log(response);
-      res.status(200).send(response);
+        console.log("Archivo encontrado para descargar");
+        console.log(response);
+        res.status(200).send(response);
+      } else {
+        res.status(404).send("File not found");
+      }
     }
   });
 });

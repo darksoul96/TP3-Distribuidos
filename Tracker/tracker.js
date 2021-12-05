@@ -222,6 +222,22 @@ trackerClient.on("message", (msg, info) => {
         info.port == nodoIzquierda.portI
       ) {
         console.log("File not found");
+        trackerClient.send(
+          JSON.stringify({
+            messageId: mensaje.messageId,
+            route: mensaje.route + "/found",
+            originIp: mensaje.originIp,
+            originPort: mensaje.originPort,
+            body: {},
+          }),
+          datosServer.port,
+          datosServer.address,
+          (err) => {
+            if (err) {
+              console.log(err);
+            }
+          }
+        );
       } else {
         // Si el archivo no se encuentra en este tracker, se lo envio al nodo derecho
         trackerClient.send(

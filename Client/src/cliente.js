@@ -75,6 +75,7 @@ const generateHTML_LIST = (arrayListar) => {
 const descargaArchivo = (i) => {
   hashArchivo = files[i];
   console.log(hashArchivo);
+
   const get = fetch(url + "/file/" + hashArchivo.id, {
     method: "GET",
     headers: {
@@ -92,6 +93,9 @@ const descargaArchivo = (i) => {
     .catch((error) => {
       console.error("Error:", error);
     });
+
+
+
 };
 
 function download(info, name) {

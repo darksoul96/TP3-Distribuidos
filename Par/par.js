@@ -40,21 +40,35 @@ rl.on("line", (input) => {
             console.log(`id: ${id}`);
             break;
         default:
-            console.log("Descargando archivo..." + input);
+            //console.log("Descargando archivo..." + input);
             //ejemplo(input);
-            solicitudTorrent(input);
+            fs.readFile(`${input}.torrente`, 'utf8', (err, data) => {
+                if (err) {
+                    console.error(err);
+                    return
+                }
+                data = JSON.parse(data);
+                console.log(data);
+
+                tracker.addressT = data.trackerIP;
+                tracker.portT = data.trackerPort;
+
+                solicitudTorrent(data.id);
+            })
+
+
             break;
     }
 });
 
-function solicitudTorrent(nombreArchivo) {
+function solicitudTorrent(id) {
     const client = dgram.createSocket("udp4");
     client.bind(() => { });
     setTimeout(() => {
         sendmsg = JSON.stringify({
             //
             messageId: "",
-            route: "/file/" + req.params.id,
+            route: "/file/" + id,
             originIP: client.address().address,
             originPort: client.address().port,
             body: {},

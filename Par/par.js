@@ -41,7 +41,8 @@ const initPar = async function () {
 const readInput = function () {
     process.stdin.setEncoding("utf8");
     process.stdin.on("readable", function () {
-        var input = process.stdin.read();
+        const input = process.stdin.read();
+    }).resume(function () {
         if (input !== null) {
             var instruction = input.toString().trim();
             switch (instruction) {
@@ -49,11 +50,11 @@ const readInput = function () {
                     console.log("Inserte el nombre del archivo");
                     process.stdin.setEncoding("utf8");
                     process.stdin.on("readable", function () {
-                        var input = process.stdin.read();
-                        if (input !== null) {
+                        let input2 = process.stdin.read();
+                        if (input2 !== null) {
                             var name = input.toString().trim();
                             process.stdout.write("Downloading torrente: " + name + "\n");
-                            ejemeplo(name);
+                            ejemplo(name);
                         }
                     });
                     break;
@@ -65,10 +66,7 @@ const readInput = function () {
     });
 };
 
-function ejemplo(nombre) {
-    console.log("Bajando " + nombre);
-    readInput();
-}
+
 
 initPar();
 readInput();

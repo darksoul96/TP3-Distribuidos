@@ -25,9 +25,11 @@ const cargaFile = () => {
     .then((response) => response.text())
     .then((data) => {
       console.log("Success:", data);
+      alert("Archivo cargado correctamente");
     })
     .catch((error) => {
       console.error("Error:", error);
+      alert("Error al cargar el archivo");
     });
 };
 
@@ -88,14 +90,11 @@ const descargaArchivo = (i) => {
     .then((data) => {
       console.log("Success:", data);
       let filename = hashArchivo.filename + ".torrente";
-      download(data, filename);   //metodo para descargar (data contiene la info del .torrente)
+      download(data, filename); //metodo para descargar (data contiene la info del .torrente)
     })
     .catch((error) => {
       console.error("Error:", error);
     });
-
-
-
 };
 
 function download(info, name) {

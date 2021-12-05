@@ -13,11 +13,19 @@ var rl = readline.createInterface({
 
 // Interfaz para solicitar el input del archivo torrente
 rl.on("line", (input) => {
-    if (input.toLowerCase() === "exit") {
-        process.exit();
-    } else {
-        console.log("Descargando archivo..." + input);
-        ejemplo(input);
+    // switch case for input
+    switch (input) {
+        case "exit":
+            console.log("Cerrando el par: " + id);
+            process.exit(0);
+            break;
+        case "id":
+            console.log(`id: ${id}`);
+            break;
+        default:
+            console.log("Descargando archivo..." + input);
+            ejemplo(input);
+            break;
     }
 });
 
@@ -39,22 +47,26 @@ var nodoIzquierda = {
     portI: null,
 };
 
-if (args.length > 2) id = args[2];
-else id = 1;
-
 const initPar = async function () {
-    var nodos = await JSON.parse(
-        fs.readFileSync("./config/nodos_par.json", "utf8")
-    )["nodos"];
-    let index = nodos.findIndex((nodo) => nodo.id == id);
-    console.log("================================================");
-    console.log("ADDRESS: " + nodos[index].address);
-    localaddress = nodos[index].address;
-    localport = nodos[index].port;
-    nodoIzquierda = nodos[index].nodoIzquierda;
-    nodoDerecha = nodos[index].nodoDerecha;
+    var nodo = await JSON.parse(fs.readFileSync("./config_nodo.json", "utf8"))[
+        "nodo"
+    ];
+    id = nodo.id;
+    localaddress = nodo.address;
+    localport = nodo.port;
+    nodoDerecha.addressD = nodo.nodoDerecha.addressD;
+    nodoDerecha.portD = nodo.nodoDerecha.portD;
+    nodoIzquierda.addressI = nodo.nodoIzquierda.addressI;
+    nodoIzquierda.portI = nodo.nodoIzquierda.portI;
+    console.log("Nodo: " + id);
+    console.log("Direccion: " + localaddress);
+    console.log("Puerto: " + localport);
+    console.log("Direccion derecha: " + nodoDerecha.addressD);
+    console.log("Puerto derecha: " + nodoDerecha.portD);
+    console.log("Direccion izquierda: " + nodoIzquierda.addressI);
+    console.log("Puerto izquierda: " + nodoIzquierda.portI);
 
-    console.log("ID: " + id);
+    console.log("================================================");
     parClient.bind({
         address: localaddress,
         port: localport,

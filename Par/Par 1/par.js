@@ -5,7 +5,7 @@ const net = require("net");
 const readline = require("readline");
 process.stdin.setEncoding("utf8");
 
-var localaddress, localport, id, archivo;
+var localaddress, localport, id, archivo, hash;
 
 var pares;
 
@@ -81,7 +81,8 @@ rl.on("line", (input) => {
         tracker.addressT = data.trackerIP;
         tracker.portT = data.trackerPort;
         console.log("Solicitando archivo " + input + ".torrente... ");
-        solicitudTorrent(data.id);
+        hash = data.id;
+        solicitudTorrent(hash);
       });
 
       break;
@@ -124,6 +125,7 @@ function solicitudDescarga(ip, port) {
       console.log("Archivo guardado");
     });
     console.log("Archivo descargado");
+    avisaTracker();
   });
   clientS.on("close", () => {
     console.log("Connection closed");
@@ -131,6 +133,32 @@ function solicitudDescarga(ip, port) {
 
   clientS.on("error", (err) => {
     console.log("No se pudo conectar con el par: " + err);
+  });
+}
+
+function avisaTracker() {
+  body = {
+    id: id,
+    filename: archivo,
+    filesize: "",
+    pares: [{ ip: localaddress, port: localport }],
+  };
+  let sendmsg = JSON.stringify({
+    messageId: "",
+    route: `/file/${id}/store`,
+    originIP: localaddress,
+    originPort: localport,
+    body: body,
+  });
+  const client = dgram.createSocket("udp4");
+  client.bind(() => {
+    console.log(client.address());
+  });
+  client.send(sendmsg, tracker.portT, tracker.addressT, (err) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send("Error loading file: " + err.message);
+    }
   });
 }
 

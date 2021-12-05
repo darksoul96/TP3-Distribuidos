@@ -11,6 +11,10 @@
             "nodoIzquierda": {
                 "addressI": "127.0.0.1",
                 "portI": "8503"
-            }
+            },
+	   "trackerHead" :{
+		"addressT" : "127.0.0.1",
+		   "portT" : "8399"
+		}
         }
 }

@@ -32,8 +32,10 @@ var rl = readline.createInterface({
 
 const server = net.createServer((socket) => {
   socket.on("data", (data) => {
-    console.log(data.toString());
-    socket.write("Hola");
+    console.log("Recibe pedido de descarga: " + data.toString());
+    let file = fs.readFileSync(data.toString(), "utf8");
+    console.log(file);
+    socket.write(file);
   });
   socket.on("end", () => {
     console.log("client disconnected");
@@ -105,17 +107,25 @@ function eleccionPar() {
 
 function solicitudDescarga(ip, port) {
   console.log("Solicitando descarga del archivo...");
-  const client = new net.Socket();
-  client.connect(port, ip, () => {
+  const clientS = new net.Socket();
+  clientS.connect(port, ip, () => {
     console.log("Connected to server");
-    client.write(archivo);
+    clientS.write(archivo);
   });
-  client.on("data", (data) => {
-    console.log(data.toString());
-    client.destroy();
+  clientS.on("data", (data) => {
+    console.log("Recibiendo archivo...");
+    fs.writeFile(archivo, data.toString(), (err) => {
+      if (err) throw err;
+      console.log("Archivo guardado");
+    });
+    console.log("Archivo descargado");
   });
-  client.on("close", () => {
+  clientS.on("close", () => {
     console.log("Connection closed");
+  });
+
+  clientS.on("error", (err) => {
+    console.log("No se pudo conectar con el par: " + err);
   });
 }
 
@@ -190,13 +200,10 @@ const initPar = async function () {
   nodoDerecha.portD = nodo.nodoDerecha.portD;
   nodoIzquierda.addressI = nodo.nodoIzquierda.addressI;
   nodoIzquierda.portI = nodo.nodoIzquierda.portI;
+  server.listen(localport, localaddress);
   console.log("Nodo: " + id);
   console.log("Direccion: " + localaddress);
   console.log("Puerto: " + localport);
-  console.log("Direccion derecha: " + nodoDerecha.addressD);
-  console.log("Puerto derecha: " + nodoDerecha.portD);
-  console.log("Direccion izquierda: " + nodoIzquierda.addressI);
-  console.log("Puerto izquierda: " + nodoIzquierda.portI);
   console.log(
     "================================================================================================"
   );
@@ -205,7 +212,6 @@ const initPar = async function () {
     port: localport,
     excluse: true,
   });
-
   console.log("Inserte el nombre del archivo torrente");
 };
 

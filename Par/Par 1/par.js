@@ -1,12 +1,11 @@
 const fs = require("fs");
 const dgram = require("dgram");
 const parClient = dgram.createSocket("udp4");
-const args = process.argv;
 const net = require("net");
 const readline = require("readline");
 process.stdin.setEncoding("utf8");
 
-var localaddress, localport, id;
+var localaddress, localport, id, archivo;
 
 var pares;
 
@@ -29,6 +28,19 @@ var rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
   terminal: false,
+});
+
+const server = net.createServer((socket) => {
+  socket.on("data", (data) => {
+    console.log(data.toString());
+    socket.write("Hola");
+  });
+  socket.on("end", () => {
+    console.log("client disconnected");
+  });
+  socket.on("close", () => {
+    console.log("connection closed");
+  });
 });
 
 // Interfaz para solicitar el input del archivo torrente
@@ -57,6 +69,7 @@ rl.on("line", (input) => {
           console.log("Por favor, ingrese un archivo valido.");
           return;
         }
+        archivo = input;
         data = JSON.parse(data);
         console.log(data);
         tracker.addressT = data.trackerIP;
@@ -92,14 +105,17 @@ function eleccionPar() {
 
 function solicitudDescarga(ip, port) {
   console.log("Solicitando descarga del archivo...");
-  net.createConnection(port, ip, () => {
-    console.log("Conectado al par...");
-    var msg = Buffer.from(id);
-    parClient.send(msg, 0, msg.length, port, ip, (err) => {
-      if (err) {
-        console.log(err);
-      }
-    });
+  const client = new net.Socket();
+  client.connect(port, ip, () => {
+    console.log("Connected to server");
+    client.write(archivo);
+  });
+  client.on("data", (data) => {
+    console.log(data.toString());
+    client.destroy();
+  });
+  client.on("close", () => {
+    console.log("Connection closed");
   });
 }
 

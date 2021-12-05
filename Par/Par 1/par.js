@@ -2,10 +2,13 @@ const fs = require("fs");
 const dgram = require("dgram");
 const parClient = dgram.createSocket("udp4");
 const args = process.argv;
+const net = require("net");
 const readline = require("readline");
 process.stdin.setEncoding("utf8");
 
 var localaddress, localport, id;
+
+var pares;
 
 var nodoDerecha = {
   addressD: null,
@@ -30,7 +33,6 @@ var rl = readline.createInterface({
 
 // Interfaz para solicitar el input del archivo torrente
 rl.on("line", (input) => {
-  // switch case for input
   switch (input) {
     case "exit":
       console.log("Cerrando el par: " + id);
@@ -39,17 +41,24 @@ rl.on("line", (input) => {
     case "id":
       console.log(`id: ${id}`);
       break;
+    case "descargar":
+      console.log("El archivo se encuentra en los siguientes pares: ");
+      for (var i = 0; i < pares.length; i++) {
+        console.log(
+          "Par:" + i + " Direccion: " + pares[i].ip + ":" + pares[i].port
+        );
+      }
+      eleccionPar();
+      break;
     default:
-      //console.log("Descargando archivo..." + input);
-      //ejemplo(input);
       fs.readFile(`${input}.torrente`, "utf8", (err, data) => {
         if (err) {
           console.error(err);
+          console.log("Por favor, ingrese un archivo valido.");
           return;
         }
         data = JSON.parse(data);
         console.log(data);
-
         tracker.addressT = data.trackerIP;
         tracker.portT = data.trackerPort;
         console.log("Solicitando archivo " + input + ".torrente... ");
@@ -59,6 +68,40 @@ rl.on("line", (input) => {
       break;
   }
 });
+
+function eleccionPar() {
+  console.log(
+    "================================================================================================"
+  );
+  var opcion = rl.question(
+    "Ingrese el numero del par que desea descargar: ",
+    function (opcion) {
+      if (opcion >= 0 && opcion < pares.length) {
+        console.log("El archivo se descargara del par: " + opcion);
+        console.log(
+          "Direccion: " + pares[opcion].ip + ":" + pares[opcion].port
+        );
+        solicitudDescarga(pares[opcion].ip, pares[opcion].port);
+      } else {
+        console.log("Por favor, ingrese un numero valido.");
+        eleccionPar();
+      }
+    }
+  );
+}
+
+function solicitudDescarga(ip, port) {
+  console.log("Solicitando descarga del archivo...");
+  net.createConnection(port, ip, () => {
+    console.log("Conectado al par...");
+    var msg = Buffer.from(id);
+    parClient.send(msg, 0, msg.length, port, ip, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+  });
+}
 
 function solicitudTorrent(id) {
   const client = dgram.createSocket("udp4");
@@ -86,18 +129,23 @@ function solicitudTorrent(id) {
   }, 200);
   client.on("message", (msg) => {
     mensaje = JSON.parse(msg);
-    console.log("MENSAJE DEL TRACKER AL PAR: " + mensaje.body);
     if (mensaje.route.includes("found")) {
-      ejemplo(mensaje.body.pares.address);
+      carga(mensaje.body.pares);
     }
   });
 }
 
-function ejemplo(input) {
+function carga(input) {
   console.log("Archivo encontrado...");
-  console.log("Lista de pares que contienen el archivo... \n" + input);
-  console.log("================================================");
-  console.log("Inserte el nombre del archivo torrente");
+  console.log("Lista de pares que contienen el archivo... \n");
+  pares = input;
+  console.log(input);
+  console.log(
+    "Inserte el nombre de otro archivo torrente o 'descargar' para descargar el archivo de alguno de los pares"
+  );
+  console.log(
+    "================================================================================================"
+  );
 }
 
 var localaddress, localport, id;
@@ -113,6 +161,9 @@ var nodoIzquierda = {
 };
 
 const initPar = async function () {
+  console.log(
+    "================================================================================================"
+  );
   var nodo = await JSON.parse(fs.readFileSync("./config_nodo.json", "utf8"))[
     "nodo"
   ];
@@ -130,14 +181,15 @@ const initPar = async function () {
   console.log("Puerto derecha: " + nodoDerecha.portD);
   console.log("Direccion izquierda: " + nodoIzquierda.addressI);
   console.log("Puerto izquierda: " + nodoIzquierda.portI);
-
-  console.log("================================================");
+  console.log(
+    "================================================================================================"
+  );
   parClient.bind({
     address: localaddress,
     port: localport,
     excluse: true,
   });
-  console.log("================================================");
+
   console.log("Inserte el nombre del archivo torrente");
 };
 

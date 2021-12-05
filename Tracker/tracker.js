@@ -196,11 +196,11 @@ trackerClient.on("message", (msg, info) => {
         originPort: mensaje.originPort,
         body: {
           id: ht.get(hash)[0],
-          filename: ht.get(hash).filename,
-          filesize: ht.get(hash).filesize,
+          filename: ht.get(hash)[1].filename,
+          filesize: ht.get(hash)[1].filesize,
           trackerIP: localaddress,
           trackerPort: localport,
-          pares: ht.get(hash).par,
+          pares: ht.get(hash)[1].pares,
         },
       };
       console.log("MENSAJE ENVIAR . BODY . ID : " + mensajeEnviar.body.id);

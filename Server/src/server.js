@@ -14,8 +14,7 @@ var trackerFileStore = {
   id: null,
   filename: "",
   filesize: 0,
-  parIP: "",
-  parPort: "",
+  pares: [{ ip: "", port: "" }],
 };
 
 app.use(cors());
@@ -143,6 +142,7 @@ app.get("/file/:id", (req, res) => {
         console.log(response);
         res.status(200).send(response);
       } else {
+        console.log("Archivo no encontrado");
         res.status(404).send("File not found");
       }
     }
@@ -152,8 +152,7 @@ app.get("/file/:id", (req, res) => {
 function loadFileStore(trackerFileStore, file) {
   trackerFileStore.filename = file.filename;
   trackerFileStore.filesize = file.filesize;
-  trackerFileStore.parIP = file.nodeIP;
-  trackerFileStore.parPort = file.nodePort;
+  trackerFileStore.pares = [{ ip: file.nodeIP, port: file.nodePort }];
   let hash = crypto.createHash("sha1");
   hash.update(file.filename + Math.round(file.filesize).toString());
   trackerFileStore.id = hash.digest("hex");

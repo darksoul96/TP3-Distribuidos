@@ -83,7 +83,7 @@ trackerClient.on("message", (msg, info) => {
       id: mensajeJson.id,
       filename: mensajeJson.filename,
       filesize: mensajeJson.filesize,
-      pares: [{ ip: mensajeJson.parIP, port: mensajeJson.parPort }],
+      pares: mensajeJson.pares,
     };
     if (!ht.get(mensajeJson.id)) {
       if (!ht.set(mensajeJson.id, arrayInfo)) {
@@ -106,16 +106,16 @@ trackerClient.on("message", (msg, info) => {
       // check if table.pares has parIP and parPort
       if (
         !noPertPares(valorTabla.pares, {
-          ip: mensajeJson.parIP,
-          port: mensajeJson.parPort,
+          ip: mensajeJson.pares[0].ip,
+          port: mensajeJson.pares[0].port,
         })
       ) {
         console.log("Ya esta el par");
       } else {
         ht.remove(mensajeJson.id);
         valorTabla.pares.push({
-          ip: mensajeJson.parIP,
-          port: mensajeJson.parPort,
+          ip: mensajeJson.pares[0].ip,
+          port: mensajeJson.pares[0].port,
         });
         ht.set(mensajeJson.id, valorTabla);
         console.log(ht.list());

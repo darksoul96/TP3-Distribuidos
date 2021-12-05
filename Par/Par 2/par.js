@@ -5,7 +5,7 @@ const net = require("net");
 const readline = require("readline");
 process.stdin.setEncoding("utf8");
 
-var localaddress, localport, id, archivo;
+var localaddress, localport, id, archivo, hash;
 
 var pares;
 
@@ -33,12 +33,9 @@ var rl = readline.createInterface({
 const server = net.createServer((socket) => {
   socket.on("data", (data) => {
     console.log("Recibe pedido de descarga: " + data.toString());
-    let file = fs.readFileSync(data);
-    // console.log(file);
-    //let file = fs.createReadStream(data.toString());
-    //socket.write(file);
-    //let file = fs.createReadStream(data.toString());
-    //file.pipe(socket);
+    let file = fs.readFileSync(data.toString());
+    socket.write(file);
+    socket.end();
   });
   socket.on("end", () => {
     console.log("client disconnected");
@@ -82,7 +79,8 @@ rl.on("line", (input) => {
         tracker.addressT = data.trackerIP;
         tracker.portT = data.trackerPort;
         console.log("Solicitando archivo " + input + ".torrente... ");
-        solicitudTorrent(data.id);
+        hash = data.id;
+        solicitudTorrent(hash);
       });
 
       break;
@@ -117,17 +115,15 @@ function solicitudDescarga(ip, port) {
     console.log("Connected to server");
     clientS.write(archivo);
   });
-  var fileCompleto = '';
+  var chunk = "";
   clientS.on("data", (data) => {
     console.log("Recibiendo archivo...");
-    fileCompleto += data;
+    chunk += data;
   });
   clientS.on("end", () => {
-    fs.writeFile(archivo, fileCompleto, (err) => {
-      if (err) throw err;
-      console.log("Archivo guardado");
-    });
     console.log("Archivo descargado");
+    fs.writeFileSync(archivo, chunk);
+    avisaTracker();
   });
   clientS.on("close", () => {
     console.log("Connection closed");
@@ -138,9 +134,35 @@ function solicitudDescarga(ip, port) {
   });
 }
 
+function avisaTracker() {
+  body = {
+    id: id,
+    filename: archivo,
+    filesize: "",
+    pares: [{ ip: localaddress, port: localport }],
+  };
+  let sendmsg = JSON.stringify({
+    messageId: "",
+    route: `/file/${id}/store`,
+    originIP: localaddress,
+    originPort: localport,
+    body: body,
+  });
+  const client = dgram.createSocket("udp4");
+  client.bind(() => {
+    console.log(client.address());
+  });
+  client.send(sendmsg, tracker.portT, tracker.addressT, (err) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send("Error loading file: " + err.message);
+    }
+  });
+}
+
 function solicitudTorrent(id) {
   const client = dgram.createSocket("udp4");
-  client.bind(() => { });
+  client.bind(() => {});
   setTimeout(() => {
     sendmsg = JSON.stringify({
       //

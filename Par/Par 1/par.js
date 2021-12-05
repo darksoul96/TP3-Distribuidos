@@ -5,7 +5,7 @@ const net = require("net");
 const readline = require("readline");
 process.stdin.setEncoding("utf8");
 
-var localaddress, localport, id, archivo, hash;
+var localaddress, localport, id, archivo, fileSize, hash;
 
 var pares;
 
@@ -33,12 +33,9 @@ var rl = readline.createInterface({
 const server = net.createServer((socket) => {
   socket.on("data", (data) => {
     console.log("Recibe pedido de descarga: " + data.toString());
-    let file = fs.readFileSync(data);
-    // console.log(file);
-    //let file = fs.createReadStream(data.toString());
-    //socket.write(file);
-    //let file = fs.createReadStream(data.toString());
-    //file.pipe(socket);
+    let file = fs.readFileSync(data.toString());
+    socket.write(file);
+    socket.end();
   });
   socket.on("end", () => {
     console.log("client disconnected");
@@ -118,18 +115,14 @@ function solicitudDescarga(ip, port) {
     console.log("Connected to server");
     clientS.write(archivo);
   });
-  var fileCompleto = '';
+
   clientS.on("data", (data) => {
     console.log("Recibiendo archivo...");
-    fileCompleto += data;
+    fs.writeFileSync(archivo, data);
   });
   clientS.on("end", () => {
-    fs.writeFile(archivo, fileCompleto, (err) => {
-      if (err) throw err;
-      console.log("Archivo guardado");
-    });
     console.log("Archivo descargado");
-    avisaTracker();
+    //avisaTracker();
   });
   clientS.on("close", () => {
     console.log("Connection closed");
@@ -168,7 +161,7 @@ function avisaTracker() {
 
 function solicitudTorrent(id) {
   const client = dgram.createSocket("udp4");
-  client.bind(() => { });
+  client.bind(() => {});
   setTimeout(() => {
     sendmsg = JSON.stringify({
       //
@@ -192,6 +185,7 @@ function solicitudTorrent(id) {
   client.on("message", (msg) => {
     mensaje = JSON.parse(msg);
     if (mensaje.route.includes("found")) {
+      fileSize = mensaje.body.filesize;
       carga(mensaje.body.pares);
     }
   });

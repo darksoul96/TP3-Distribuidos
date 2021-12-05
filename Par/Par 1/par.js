@@ -33,9 +33,10 @@ var rl = readline.createInterface({
 const server = net.createServer((socket) => {
   socket.on("data", (data) => {
     console.log("Recibe pedido de descarga: " + data.toString());
-    // let file = fs.readFileSync(data.toString(), "utf8");
+    let file = fs.readFileSync(data);
     // console.log(file);
-    // socket.write(file);
+    //let file = fs.createReadStream(data.toString());
+    //socket.write(file);
     //let file = fs.createReadStream(data.toString());
     //file.pipe(socket);
   });
@@ -116,10 +117,13 @@ function solicitudDescarga(ip, port) {
     console.log("Connected to server");
     clientS.write(archivo);
   });
+  var fileCompleto = '';
   clientS.on("data", (data) => {
     console.log("Recibiendo archivo...");
-    //fs.createReadStream(archivo).pipe(fs.createWriteStream(archivo));
-    fs.writeFile(archivo, data, (err) => {
+    fileCompleto += data;
+  });
+  clientS.on("end", () => {
+    fs.writeFile(archivo, fileCompleto, (err) => {
       if (err) throw err;
       console.log("Archivo guardado");
     });
@@ -136,7 +140,7 @@ function solicitudDescarga(ip, port) {
 
 function solicitudTorrent(id) {
   const client = dgram.createSocket("udp4");
-  client.bind(() => {});
+  client.bind(() => { });
   setTimeout(() => {
     sendmsg = JSON.stringify({
       //

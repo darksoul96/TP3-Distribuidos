@@ -33,11 +33,12 @@ var rl = readline.createInterface({
 const server = net.createServer((socket) => {
   socket.on("data", (data) => {
     console.log("Recibe pedido de descarga: " + data.toString());
-    // let file = fs.readFileSync(data.toString(), "utf8");
+    let file = fs.readFileSync(data);
     // console.log(file);
-    // socket.write(file);
-    let file = fs.createReadStream(data.toString());
-    file.pipe(socket);
+    //let file = fs.createReadStream(data.toString());
+    //socket.write(file);
+    //let file = fs.createReadStream(data.toString());
+    //file.pipe(socket);
   });
   socket.on("end", () => {
     console.log("client disconnected");
@@ -58,13 +59,15 @@ rl.on("line", (input) => {
       console.log(`id: ${id}`);
       break;
     case "descargar":
-      console.log("El archivo se encuentra en los siguientes pares: ");
-      for (var i = 0; i < pares.length; i++) {
-        console.log(
-          "Par:" + i + " Direccion: " + pares[i].ip + ":" + pares[i].port
-        );
+      if (pares) {
+        console.log("El archivo se encuentra en los siguientes pares: ");
+        for (var i = 0; i < pares.length; i++) {
+          console.log(
+            "Par:" + i + " Direccion: " + pares[i].ip + ":" + pares[i].port
+          );
+        }
+        eleccionPar();
       }
-      eleccionPar();
       break;
     default:
       fs.readFile(`${input}.torrente`, "utf8", (err, data) => {
@@ -114,10 +117,13 @@ function solicitudDescarga(ip, port) {
     console.log("Connected to server");
     clientS.write(archivo);
   });
+  var fileCompleto = '';
   clientS.on("data", (data) => {
     console.log("Recibiendo archivo...");
-    //fs.createReadStream(archivo).pipe(fs.createWriteStream(archivo));
-    fs.writeFile(archivo, data, (err) => {
+    fileCompleto += data;
+  });
+  clientS.on("end", () => {
+    fs.writeFile(archivo, fileCompleto, (err) => {
       if (err) throw err;
       console.log("Archivo guardado");
     });
@@ -134,7 +140,7 @@ function solicitudDescarga(ip, port) {
 
 function solicitudTorrent(id) {
   const client = dgram.createSocket("udp4");
-  client.bind(() => {});
+  client.bind(() => { });
   setTimeout(() => {
     sendmsg = JSON.stringify({
       //
@@ -148,7 +154,6 @@ function solicitudTorrent(id) {
   setTimeout(() => {
     client.send(sendmsg, tracker.portT, tracker.addressT, (err, response) => {
       if (err) {
-        console.log(err);
         res.status(500).send("Error searching file: " + err.message);
         res.end();
         client.close();
@@ -168,26 +173,20 @@ function carga(input) {
   console.log("Archivo encontrado...");
   console.log("Lista de pares que contienen el archivo... \n");
   pares = input;
-  console.log(input);
-  console.log(
-    "Inserte el nombre de otro archivo torrente o 'descargar' para descargar el archivo de alguno de los pares"
-  );
-  console.log(
-    "================================================================================================"
-  );
+  if (pares) {
+    console.log(pares);
+    console.log(
+      "Inserte el nombre de otro archivo torrente o 'descargar' para descargar el archivo de alguno de los pares"
+    );
+    console.log(
+      "================================================================================================"
+    );
+  } else {
+    console.log(
+      "El archivo no se encuentra en ningun par, inserte una nueva busqueda"
+    );
+  }
 }
-
-var localaddress, localport, id;
-
-var nodoDerecha = {
-  addressD: null,
-  portD: null,
-};
-
-var nodoIzquierda = {
-  addressI: null,
-  portI: null,
-};
 
 const initPar = async function () {
   console.log(

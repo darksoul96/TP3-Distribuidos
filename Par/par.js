@@ -114,12 +114,20 @@ function solicitudDescarga(ip, port) {
     console.log("Connected to server");
     clientS.write(archivo);
   });
-
+  let chunks = [];
   clientS.on("data", (data) => {
     console.log("Recibiendo archivo...");
-    fs.writeFileSync(archivo, data);
+    chunks.push(data);
   });
   clientS.on("end", () => {
+    const file = Buffer.concat(chunks);
+    fs.writeFile(archivo, file, (err) => {
+      if (err) {
+        console.log("Error al guardar el archivo: " + err.message);
+      } else {
+        console.log("Archivo guardado correctamente.");
+      }
+    });
     console.log("Archivo descargado");
     avisaTracker();
   });

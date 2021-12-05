@@ -60,6 +60,7 @@ const generateHTML_LIST = (arrayListar) => {
     document.getElementById("lista_descargas").innerHTML += `
     <form method="get" onsubmit="descargaArchivo(${i})";return false>
     <label id="label${i}">${file.filename}</label>
+    <label id="label${i}">Size: ${file.filesize}</label>
     <input type="submit" value="Descargar" id="button${i}">
     </form>`;
     document.getElementById("lista_descargas").innerHTML += "<br>";

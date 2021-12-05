@@ -8,18 +8,18 @@ process.stdin.setEncoding("utf8");
 var localaddress, localport, id;
 
 var nodoDerecha = {
-  addressD: null,
-  portD: null,
+    addressD: null,
+    portD: null,
 };
 
 var nodoIzquierda = {
-  addressI: null,
-  portI: null,
+    addressI: null,
+    portI: null,
 };
 
 var tracker = {
-  addressT: null,
-  portT: null,
+    addressT: null,
+    portT: null,
 };
 
 var rl = readline.createInterface({
@@ -30,26 +30,6 @@ var rl = readline.createInterface({
 
 // Interfaz para solicitar el input del archivo torrente
 rl.on("line", (input) => {
-<<<<<<< HEAD
-  // switch case for input
-  switch (input) {
-    case "exit":
-      console.log("Cerrando el par: " + id);
-      process.exit(0);
-      break;
-    case "id":
-      console.log(`id: ${id}`);
-      break;
-    case "add":
-      break;
-    default:
-      console.log("Descargando archivo..." + input);
-
-      solicitudTorrent(input);
-      ejemplo(input);
-      break;
-  }
-=======
     // switch case for input
     switch (input) {
         case "exit":
@@ -61,55 +41,52 @@ rl.on("line", (input) => {
             break;
         default:
             console.log("Descargando archivo..." + input);
-            ejemplo(input);
+            //ejemplo(input);
+            solicitudTorrent(input);
             break;
     }
->>>>>>> e26348376d445716e8432d1ac2e2d2c246f4f849
 });
 
 function solicitudTorrent(nombreArchivo) {
-  const client = dgram.createSocket("udp4");
-  client.bind(() => {});
-  setTimeout(() => {
-    sendmsg = JSON.stringify({
-      //
-      messageId: "",
-      route: "/file/" + req.params.id,
-      originIP: client.address().address,
-      originPort: client.address().port,
-      body: {},
-    });
-  }, 100);
-  setTimeout(() => {
-    client.send(sendmsg, tracker.portT, tracker.addressT, (err, response) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send("Error searching file: " + err.message);
-        res.end();
-        client.close();
-      }
-      response = JSON.parse(response);
-    });
-  }, 200);
-  client.on("message", (msg) => {
-    console.log(
-      "Recibe respuesta de descargar una vez encontrado el archivo: \n"
-    );
-    mensaje = JSON.parse(msg);
-    console.log("MENSAJE DEL TRACKER AL SERVER: " + mensaje.body);
-    //Si el mensaje es la respuesta del scan, tengo que devolverle la lista al cliente
-    if (mensaje.route.includes("found")) {
-      let response = {
-        id: mensaje.body.id,
-        trackerIP: mensaje.body.trackerIP,
-        trackerPort: mensaje.body.trackerPort,
-      };
+    const client = dgram.createSocket("udp4");
+    client.bind(() => { });
+    setTimeout(() => {
+        sendmsg = JSON.stringify({
+            //
+            messageId: "",
+            route: "/file/" + req.params.id,
+            originIP: client.address().address,
+            originPort: client.address().port,
+            body: {},
+        });
+    }, 100);
+    setTimeout(() => {
+        client.send(sendmsg, tracker.portT, tracker.addressT, (err, response) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send("Error searching file: " + err.message);
+                res.end();
+                client.close();
+            }
+            response = JSON.parse(response);
+        });
+    }, 200);
+    client.on("message", (msg) => {
 
-      console.log("Archivo encontrado para descargar");
-      console.log(response);
-      res.status(200).send(response);
-    }
-  });
+        mensaje = JSON.parse(msg);
+        console.log("MENSAJE DEL TRACKER AL PAR: " + mensaje.body);
+        //Si regresa found quiere decir que encontre el archivo original
+        if (mensaje.route.includes("found")) {  //Si el archivo está en un tracker, tomo la lista de pares
+            // let response = {
+
+            // };
+
+            // console.log(response);
+            // res.status(200).send(response);
+
+            ejemplo(mensaje.body.filename);
+        }
+    });
 }
 
 function ejemplo(input) {
@@ -118,8 +95,6 @@ function ejemplo(input) {
     console.log("Inserte el nombre del archivo torrente");
 }
 
-<<<<<<< HEAD
-=======
 var localaddress, localport, id;
 
 var nodoDerecha = {
@@ -132,7 +107,6 @@ var nodoIzquierda = {
     portI: null,
 };
 
->>>>>>> e26348376d445716e8432d1ac2e2d2c246f4f849
 const initPar = async function () {
     var nodo = await JSON.parse(fs.readFileSync("./config_nodo.json", "utf8"))[
         "nodo"

@@ -184,18 +184,6 @@ function carga(input) {
   }
 }
 
-var localaddress, localport, id;
-
-var nodoDerecha = {
-  addressD: null,
-  portD: null,
-};
-
-var nodoIzquierda = {
-  addressI: null,
-  portI: null,
-};
-
 const initPar = async function () {
   console.log(
     "================================================================================================"

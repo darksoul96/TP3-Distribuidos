@@ -67,7 +67,7 @@ trackerClient.on("listening", () => {
 
 trackerClient.on("message", (msg, info) => {
   console.log(
-    `Tracker: ${id} recibio el mensaje: ${msg} de la direccion: ${info.address} con puerto: ${info.port}`
+    `Tracker: ${id} recibio un mensaje de la direccion: ${info.address} con puerto: ${info.port}`
   );
   let mensaje = JSON.parse(msg);
   let mensajeRuta = mensaje.route.toString();
@@ -87,7 +87,6 @@ trackerClient.on("message", (msg, info) => {
     };
     if (!ht.get(mensajeJson.id)) {
       if (!ht.set(mensajeJson.id, arrayInfo)) {
-        console.log("No entro");
         trackerClient.send(
           msg,
           nodoDerecha.portD,
@@ -99,18 +98,14 @@ trackerClient.on("message", (msg, info) => {
           }
         );
       } else {
-        console.log(ht.list());
+        console.log(
+          "Se guardo el elemento " + mensajeJson.filename + " en la tabla"
+        );
       }
     } else {
       let valorTabla = ht.get(mensajeJson.id)[1];
-      // check if table.pares has parIP and parPort
-      if (
-        !noPertPares(valorTabla.pares, {
-          ip: mensajeJson.pares[0].ip,
-          port: mensajeJson.pares[0].port,
-        })
-      ) {
-        console.log("Ya esta el par");
+      if (!noPertPares(valorTabla.pares, mensajeJson.pares)) {
+        console.log("Ya existe el par");
       } else {
         ht.remove(mensajeJson.id);
         valorTabla.pares.push({
@@ -118,7 +113,7 @@ trackerClient.on("message", (msg, info) => {
           port: mensajeJson.pares[0].port,
         });
         ht.set(mensajeJson.id, valorTabla);
-        console.log(ht.list());
+        console.log("Se actualizo la lista de los pares:\n");
         console.log(valorTabla.pares);
       }
     }
@@ -129,7 +124,6 @@ trackerClient.on("message", (msg, info) => {
     //tengo messageId, route, originIp, originPort, body(files[])
     var arrayArchivos = [];
     arrayArchivos = mensaje.body.files;
-    console.log(arrayArchivos);
     appendElementos(arrayArchivos);
     files = arrayArchivos;
     let mensajeEnviar = {
@@ -139,15 +133,6 @@ trackerClient.on("message", (msg, info) => {
       originPort: mensaje.originPort,
       body: { files },
     };
-    console.log(
-      "info address:" +
-        info.address +
-        " NodoIzquierda Address:" +
-        nodoIzquierda.addressI
-    );
-    console.log(
-      "Info port: " + info.port + " NodoIzquierda Port: " + nodoIzquierda.portI
-    );
     if (
       id == 1 &&
       info.address == nodoIzquierda.addressI &&
@@ -203,7 +188,6 @@ trackerClient.on("message", (msg, info) => {
           pares: ht.get(hash)[1].pares,
         },
       };
-      console.log("MENSAJE ENVIAR . BODY . ID : " + mensajeEnviar.body.id);
       trackerClient.send(
         JSON.stringify(mensajeEnviar),
         datosServer.port,
@@ -258,7 +242,6 @@ trackerClient.on("message", (msg, info) => {
 const appendElementos = (array) => {
   let arrayTabla = ht.list();
   if (arrayTabla) {
-    console.log("array:" + array);
     for (let i = 0; i < arrayTabla.length; i++) {
       if (arrayTabla[i] && noPert(array, arrayTabla[i][1])) {
         array.push(arrayTabla[i][1]);
@@ -269,8 +252,10 @@ const appendElementos = (array) => {
 
 noPertPares = (array, elemento) => {
   for (let i = 0; i < array.length; i++) {
-    if (array[i].ip == elemento.ip && array[i].port == elemento.port) {
-      return false;
+    for (let j = 0; j < elemento.length; j++) {
+      if (array[i].ip == elemento[j].ip && array[i].port == elemento[j].port) {
+        return false;
+      }
     }
   }
   return true;

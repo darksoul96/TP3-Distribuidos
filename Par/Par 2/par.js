@@ -5,7 +5,7 @@ const net = require("net");
 const readline = require("readline");
 process.stdin.setEncoding("utf8");
 
-var localaddress, localport, id, archivo, hash;
+var localaddress, localport, id, archivo, fileSize, hash;
 
 var pares;
 
@@ -73,7 +73,6 @@ rl.on("line", (input) => {
           console.log("Por favor, ingrese un archivo valido.");
           return;
         }
-        archivo = input;
         data = JSON.parse(data);
         console.log(data);
         tracker.addressT = data.trackerIP;
@@ -115,14 +114,13 @@ function solicitudDescarga(ip, port) {
     console.log("Connected to server");
     clientS.write(archivo);
   });
-  var chunk = "";
+
   clientS.on("data", (data) => {
     console.log("Recibiendo archivo...");
-    chunk += data;
+    fs.writeFileSync(archivo, data);
   });
   clientS.on("end", () => {
     console.log("Archivo descargado");
-    fs.writeFileSync(archivo, chunk);
     avisaTracker();
   });
   clientS.on("close", () => {
@@ -135,23 +133,20 @@ function solicitudDescarga(ip, port) {
 }
 
 function avisaTracker() {
-  body = {
-    id: id,
-    filename: archivo,
-    filesize: "",
-    pares: [{ ip: localaddress, port: localport }],
-  };
   let sendmsg = JSON.stringify({
     messageId: "",
-    route: `/file/${id}/store`,
+    route: `/file/${hash}/store`,
     originIP: localaddress,
     originPort: localport,
-    body: body,
+    body: JSON.stringify({
+      id: hash,
+      filename: archivo,
+      filesize: fileSize,
+      pares: [{ ip: localaddress, port: localport }],
+    }),
   });
   const client = dgram.createSocket("udp4");
-  client.bind(() => {
-    console.log(client.address());
-  });
+  client.bind(() => {});
   client.send(sendmsg, tracker.portT, tracker.addressT, (err) => {
     if (err) {
       console.log(err);
@@ -186,6 +181,8 @@ function solicitudTorrent(id) {
   client.on("message", (msg) => {
     mensaje = JSON.parse(msg);
     if (mensaje.route.includes("found")) {
+      archivo = mensaje.body.filename;
+      fileSize = mensaje.body.filesize;
       carga(mensaje.body.pares);
     }
   });

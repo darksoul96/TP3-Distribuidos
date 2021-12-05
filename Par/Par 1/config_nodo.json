@@ -1,0 +1,16 @@
+{
+"nodo" :
+        {
+            "id": 1,
+            "address": "127.0.0.1",
+            "port": "8499",
+            "nodoDerecha": {
+                "addressD": "127.0.0.1",
+                "portD": "8500"
+            },
+            "nodoIzquierda": {
+                "addressI": "127.0.0.1",
+                "portI": "8503"
+            }
+        }
+}

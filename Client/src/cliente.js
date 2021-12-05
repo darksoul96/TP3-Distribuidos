@@ -61,9 +61,15 @@ const generateHTML_LIST = (arrayListar) => {
 
     document.getElementById("lista_descargas").innerHTML += `
     <form method="get" onsubmit="descargaArchivo(${i})";return false>
-    <label id="label${i}">${file.filename}</label>
-    <label id="label${i}">Size: ${file.filesize}</label>
-    <input type="submit" value="Descargar" id="button${i}">
+    <div>
+    <ul id="horizontal-list" class="columns" data-columns="2" style="list-style-type:none;">
+      <div>
+      <li><label id="label${i}" class="nombre_archivo_lista">${file.filename}</label></li>
+      <li><label id="label${i}" class="size_archivo_lista">Size: ${file.filesize} bytes</label></li><br>
+      </div>
+      <li><input type="submit" value="Descargar" id="button${i}" class="boton_descarga"></li>
+    </ul>
+    </div>
     </form>`;
     document.getElementById("lista_descargas").innerHTML += "<br>";
 

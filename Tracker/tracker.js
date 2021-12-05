@@ -83,22 +83,45 @@ trackerClient.on("message", (msg, info) => {
       id: mensajeJson.id,
       filename: mensajeJson.filename,
       filesize: mensajeJson.filesize,
-      par: { ip: mensajeJson.parIP, port: mensajeJson.parPort },
+      pares: [{ ip: mensajeJson.parIP, port: mensajeJson.parPort }],
     };
-    if (!ht.set(mensajeJson.id, arrayInfo)) {
-      console.log("No entro");
-      trackerClient.send(
-        msg,
-        nodoDerecha.portD,
-        nodoDerecha.addressD,
-        (err) => {
-          if (err) {
-            console.log(err);
-            res.status(500).send("Error loading file: " + err.message);
+    if (!ht.get(mensajeJson.id)) {
+      if (!ht.set(mensajeJson.id, arrayInfo)) {
+        console.log("No entro");
+        trackerClient.send(
+          msg,
+          nodoDerecha.portD,
+          nodoDerecha.addressD,
+          (err) => {
+            if (err) {
+              console.log(err);
+            }
           }
-        }
-      );
-    } else console.log(ht.list());
+        );
+      } else {
+        console.log(ht.list());
+      }
+    } else {
+      let valorTabla = ht.get(mensajeJson.id)[1];
+      // check if table.pares has parIP and parPort
+      if (
+        !noPertPares(valorTabla.pares, {
+          ip: mensajeJson.parIP,
+          port: mensajeJson.parPort,
+        })
+      ) {
+        console.log("Ya esta el par");
+      } else {
+        ht.remove(mensajeJson.id);
+        valorTabla.pares.push({
+          ip: mensajeJson.parIP,
+          port: mensajeJson.parPort,
+        });
+        ht.set(mensajeJson.id, valorTabla);
+        console.log(ht.list());
+        console.log(valorTabla.pares);
+      }
+    }
   }
 
   //INTERFAZ SCAN
@@ -138,7 +161,6 @@ trackerClient.on("message", (msg, info) => {
         (err) => {
           if (err) {
             console.log(err);
-            res.status(500).send("Error loading file: " + err.message);
           }
         }
       );
@@ -151,7 +173,6 @@ trackerClient.on("message", (msg, info) => {
         (err) => {
           if (err) {
             console.log(err);
-            res.status(500).send("Error loading file: " + err.message);
           }
         }
       );
@@ -179,7 +200,7 @@ trackerClient.on("message", (msg, info) => {
           filesize: ht.get(hash).filesize,
           trackerIP: localaddress,
           trackerPort: localport,
-          pares: { pares },
+          pares: ht.get(hash).par,
         },
       };
       console.log("MENSAJE ENVIAR . BODY . ID : " + mensajeEnviar.body.id);
@@ -190,7 +211,6 @@ trackerClient.on("message", (msg, info) => {
         (err) => {
           if (err) {
             console.log(err);
-            res.status(500).send("Error loading file: " + err.message);
           }
         }
       );
@@ -201,14 +221,7 @@ trackerClient.on("message", (msg, info) => {
         info.address == nodoIzquierda.addressI &&
         info.port == nodoIzquierda.portI
       ) {
-        // let mensajeEnviar = {
-        //   messageId: mensaje.messageId,
-        //   route: mensaje.route + "/found",
-        //   originIp: mensaje.originIp,
-        //   originPort: mensaje.originPort,
-        //   body: {},
-        // };
-        res.status(404).send("File not found: " + err.message);
+        console.log("File not found");
       } else {
         // Si el archivo no se encuentra en este tracker, se lo envio al nodo derecho
         trackerClient.send(
@@ -218,7 +231,6 @@ trackerClient.on("message", (msg, info) => {
           (err) => {
             if (err) {
               console.log(err);
-              res.status(500).send("Error loading file: " + err.message);
             }
           }
         );
@@ -237,6 +249,15 @@ const appendElementos = (array) => {
       }
     }
   }
+};
+
+noPertPares = (array, elemento) => {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i].ip == elemento.ip && array[i].port == elemento.port) {
+      return false;
+    }
+  }
+  return true;
 };
 
 noPert = (array, elemento) => {

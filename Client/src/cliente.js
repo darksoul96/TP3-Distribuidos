@@ -115,3 +115,14 @@ function download(info, name) {
   element.click();
   document.body.removeChild(element);
 }
+
+
+function limpiarCampos() {
+  //timeout
+  setTimeout(function () {
+    document.getElementById("fname").value = "";
+    document.getElementById("fsize").value = "";
+    document.getElementById("fnodeip").value = "";
+    document.getElementById("fnodeport").value = "";
+  }, 1000);
+}

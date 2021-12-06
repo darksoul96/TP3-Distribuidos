@@ -56,6 +56,7 @@ const initTracker = async function () {
     port: localport,
     excluse: true,
   });
+
 };
 
 initTracker();
@@ -237,6 +238,86 @@ trackerClient.on("message", (msg, info) => {
       }
     }
   }
+
+  //INTERFAZ COUNT
+  if (mensajeRuta.includes("/count")) {
+
+    let cantidadArchivosLocales = ht.getSize();
+
+    //Si la request le llega al primer tracker, inicializo los contadores y los envio al siguiente tracker
+    if (id == 1 && info.address == datosServer.address && info.port == datosServer.port) {
+      let mensajeEnviar = {
+        messageId: mensaje.messageId,
+        route: mensaje.route,
+        body: {
+          trackerCount: cantidadTrackers,
+          fileCount: cantidadArchivosLocales,
+        },
+      };
+
+      trackerClient.send(
+        JSON.stringify(mensajeEnviar),
+        nodoDerecha.portD,
+        nodoDerecha.addressD,
+        (err) => {
+          if (err) {
+            console.log(err);
+          }
+        }
+      );
+    }
+    else if (   //Devuelvo la request al server
+      id == 1 &&
+      info.address == nodoIzquierda.addressI &&
+      info.port == nodoIzquierda.portI
+    ) {
+
+      let mensajeEnviar = {
+        messageId: mensaje.messageId,
+        route: mensaje.route,
+        body: {
+          trackerCount: mensaje.body.trackerCount,
+          fileCount: mensaje.body.fileCount,
+        },
+      };
+
+      trackerClient.send(
+        JSON.stringify(mensajeEnviar),
+        datosServer.port,
+        datosServer.address,
+        (err) => {
+          if (err) {
+            console.log(err);
+          }
+        }
+      );
+    }
+    else {
+      // le envio al nodo derecho para que siga contando
+
+      let mensajeEnviar = {
+        messageId: mensaje.messageId,
+        route: mensaje.route,
+        body: {
+          trackerCount: mensaje.body.trackerCount,
+          fileCount: mensaje.body.fileCount + cantidadArchivosLocales,
+        },
+      };
+
+      trackerClient.send(
+        JSON.stringify(mensajeEnviar),
+        nodoDerecha.portD,
+        nodoDerecha.addressD,
+        (err) => {
+          if (err) {
+            console.log(err);
+          }
+        }
+      );
+    }
+  }
+
+
 });
 
 const appendElementos = (array) => {

@@ -60,7 +60,12 @@ rl.on("line", (input) => {
         console.log("El archivo se encuentra en los siguientes pares: ");
         for (var i = 0; i < pares.length; i++) {
           console.log(
-            "Par:" + i + " Direccion: " + pares[i].ip + ":" + pares[i].port
+            "Par:" +
+              i +
+              " Direccion: " +
+              pares[i].parIP +
+              ":" +
+              pares[i].parPort
           );
         }
         eleccionPar();
@@ -78,7 +83,7 @@ rl.on("line", (input) => {
         tracker.addressT = data.trackerIP;
         tracker.portT = data.trackerPort;
         console.log("Solicitando archivo " + input + ".torrente... ");
-        hash = data.id;
+        hash = data.hash;
         solicitudTorrent(hash);
       });
 
@@ -96,9 +101,9 @@ function eleccionPar() {
       if (opcion >= 0 && opcion < pares.length) {
         console.log("El archivo se descargara del par: " + opcion);
         console.log(
-          "Direccion: " + pares[opcion].ip + ":" + pares[opcion].port
+          "Direccion: " + pares[opcion].parIP + ":" + pares[opcion].parPort
         );
-        solicitudDescarga(pares[opcion].ip, pares[opcion].port);
+        solicitudDescarga(pares[opcion].parIP, pares[opcion].parPort);
       } else {
         console.log("Por favor, ingrese un numero valido.");
         eleccionPar();
@@ -155,6 +160,7 @@ function avisaTracker() {
   });
   const client = dgram.createSocket("udp4");
   client.bind(() => {});
+  console.log(sendmsg);
   client.send(sendmsg, tracker.portT, tracker.addressT, (err) => {
     if (err) {
       console.log(err);

@@ -56,7 +56,6 @@ const initTracker = async function () {
     port: localport,
     excluse: true,
   });
-
 };
 
 initTracker();
@@ -110,8 +109,8 @@ trackerClient.on("message", (msg, info) => {
       } else {
         ht.remove(mensajeJson.id);
         valorTabla.pares.push({
-          ip: mensajeJson.pares[0].ip,
-          port: mensajeJson.pares[0].port,
+          parIP: mensajeJson.pares[0].ip,
+          parPort: mensajeJson.pares[0].port,
         });
         ht.set(mensajeJson.id, valorTabla);
         console.log("Se actualizo la lista de los pares:\n");
@@ -241,11 +240,14 @@ trackerClient.on("message", (msg, info) => {
 
   //INTERFAZ COUNT
   if (mensajeRuta.includes("/count")) {
-
     let cantidadArchivosLocales = ht.getSize();
 
     //Si la request le llega al primer tracker, inicializo los contadores y los envio al siguiente tracker
-    if (id == 1 && info.address == datosServer.address && info.port == datosServer.port) {
+    if (
+      id == 1 &&
+      info.address == datosServer.address &&
+      info.port == datosServer.port
+    ) {
       let mensajeEnviar = {
         messageId: mensaje.messageId,
         route: mensaje.route,
@@ -265,13 +267,12 @@ trackerClient.on("message", (msg, info) => {
           }
         }
       );
-    }
-    else if (   //Devuelvo la request al server
+    } else if (
+      //Devuelvo la request al server
       id == 1 &&
       info.address == nodoIzquierda.addressI &&
       info.port == nodoIzquierda.portI
     ) {
-
       let mensajeEnviar = {
         messageId: mensaje.messageId,
         route: mensaje.route,
@@ -291,8 +292,7 @@ trackerClient.on("message", (msg, info) => {
           }
         }
       );
-    }
-    else {
+    } else {
       // le envio al nodo derecho para que siga contando
 
       let mensajeEnviar = {
@@ -316,8 +316,6 @@ trackerClient.on("message", (msg, info) => {
       );
     }
   }
-
-
 });
 
 const appendElementos = (array) => {

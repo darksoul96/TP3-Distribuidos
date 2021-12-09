@@ -93,7 +93,7 @@ app.get("/file", (req, res) => {
   });
 });
 
-//INTERFAZ DE DESCARGA DE ARCHIVO
+//INTERFAZ DE DESCARGA DE ARCHIVO - SEARCH
 app.get("/file/:id", (req, res) => {
   console.log("Recibe solicitud de descarga de archivo: \n");
 

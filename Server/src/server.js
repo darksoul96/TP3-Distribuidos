@@ -14,7 +14,7 @@ var trackerFileStore = {
   id: null,
   filename: "",
   filesize: 0,
-  pares: [{ ip: "", port: "" }],
+  pares: [{ parIP: "", parPort: "" }],
 };
 
 app.use(cors());
@@ -25,22 +25,32 @@ app.post("/file/", (req, res) => {
   console.log("Recibe archivo: \n");
   console.log(req.body);
   loadFileStore(trackerFileStore, req.body);
-  let body = JSON.stringify(trackerFileStore);
-  let sendmsg = JSON.stringify({
-    route: `/file/${trackerFileStore.id}/store`,
-    body: body,
-  });
+  let body = trackerFileStore;
   const client = dgram.createSocket("udp4");
   client.bind(() => {
     console.log(client.address());
   });
-  client.send(sendmsg, portst, iptracker, (err) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).send("Error loading file: " + err.message);
-    }
-  });
-  return res.status(201).send("File Recieved");
+
+  setTimeout(() => {
+    sendmsg = JSON.stringify({
+      messageId: "",
+      route: `/file/${trackerFileStore.id}/store`,
+      originIP: client.address().address,
+      originPort: client.address().port,
+      body: body,
+    });
+    console.log(sendmsg);
+  }, 100);
+
+  setTimeout(() => {
+    client.send(sendmsg, portst, iptracker, (err) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).send("Error loading file: " + err.message);
+      }
+      return res.status(201).send("File Recieved");
+    });
+  }, 1000);
   //res.end();
 });
 
@@ -133,7 +143,7 @@ app.get("/file/:id", (req, res) => {
     if (mensaje.route.includes("found")) {
       if (mensaje.body) {
         let response = {
-          id: mensaje.body.id,
+          hash: mensaje.body.id,
           trackerIP: mensaje.body.trackerIP,
           trackerPort: mensaje.body.trackerPort,
         };
@@ -152,7 +162,7 @@ app.get("/file/:id", (req, res) => {
 function loadFileStore(trackerFileStore, file) {
   trackerFileStore.filename = file.filename;
   trackerFileStore.filesize = file.filesize;
-  trackerFileStore.pares = [{ ip: file.nodeIP, port: file.nodePort }];
+  trackerFileStore.pares = [{ parIP: file.nodeIP, parPort: file.nodePort }];
   let hash = crypto.createHash("sha1");
   hash.update(file.filename + Math.round(file.filesize).toString());
   trackerFileStore.id = hash.digest("hex");

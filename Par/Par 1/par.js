@@ -151,12 +151,12 @@ function avisaTracker() {
     route: `/file/${hash}/store`,
     originIP: localaddress,
     originPort: localport,
-    body: JSON.stringify({
+    body: {
       id: hash,
       filename: archivo,
       filesize: fileSize,
-      pares: [{ ip: localaddress, port: localport }],
-    }),
+      pares: [{ parIP: localaddress, parPort: localport }],
+    },
   });
   const client = dgram.createSocket("udp4");
   client.bind(() => {});
@@ -181,7 +181,9 @@ function solicitudTorrent(id) {
       originPort: client.address().port,
       body: {},
     });
+    console.log(sendmsg);
   }, 100);
+
   setTimeout(() => {
     client.send(sendmsg, tracker.portT, tracker.addressT, (err, response) => {
       if (err) {
@@ -194,6 +196,10 @@ function solicitudTorrent(id) {
   }, 200);
   client.on("message", (msg) => {
     mensaje = JSON.parse(msg);
+    console.log(
+      "IMPRMO MENSAJE------------------------------------------------------"
+    );
+    console.log(mensaje);
     if (mensaje.route.includes("found")) {
       archivo = mensaje.body.filename;
       fileSize = mensaje.body.filesize;

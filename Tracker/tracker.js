@@ -78,7 +78,7 @@ trackerClient.on("message", (msg, info) => {
 
   //INTERFAZ STORE tracker-tracker
   if (mensajeRuta.includes("/store") && mensajeRuta.includes("/file")) {
-    let mensajeJson = JSON.parse(mensaje.body);
+    let mensajeJson = mensaje.body;
     let arrayInfo = {
       id: mensajeJson.id,
       filename: mensajeJson.filename,
@@ -109,8 +109,8 @@ trackerClient.on("message", (msg, info) => {
       } else {
         ht.remove(mensajeJson.id);
         valorTabla.pares.push({
-          parIP: mensajeJson.pares[0].ip,
-          parPort: mensajeJson.pares[0].port,
+          parIP: mensajeJson.pares[0].parIP,
+          parPort: mensajeJson.pares[0].parPort,
         });
         ht.set(mensajeJson.id, valorTabla);
         console.log("Se actualizo la lista de los pares:\n");
@@ -332,7 +332,10 @@ const appendElementos = (array) => {
 noPertPares = (array, elemento) => {
   for (let i = 0; i < array.length; i++) {
     for (let j = 0; j < elemento.length; j++) {
-      if (array[i].ip == elemento[j].ip && array[i].port == elemento[j].port) {
+      if (
+        array[i].parIP == elemento[j].parIP &&
+        array[i].parPort == elemento[j].parPort
+      ) {
         return false;
       }
     }
